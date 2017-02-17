@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        >
+
+    <ImageView
+            android:id="@+id/bookImg"
+            android:layout_width="60dp"
+            android:layout_height="75dp"
+            android:src="@drawable/book_beishida_8_down"
+            />
+
+    <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/margin_left_mid"
+            >
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="英语四级核心词汇"
+                android:textSize="18sp"
+                android:id="@+id/bookName"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"/>
+
+
+        <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/textView3">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="left|bottom"
+                    android:id="@+id/linearLayout3">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4325"
+                            android:id="@+id/wordsNum"/>
+
+                <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="词汇"
+                            android:id="@+id/textView9"/>
+
+            </LinearLayout>
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="切换"
+                    android:id="@+id/changePlan"
+                    android:background="@drawable/bg_btn_selector"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="13dp"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</LinearLayout>

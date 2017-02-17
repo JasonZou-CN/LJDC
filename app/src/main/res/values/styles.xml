@@ -1,0 +1,52 @@
+<resources>
+    <!--界面进出动画 START-->
+    <style name="ThemeActivity" parent="android:Theme.Holo.Light">
+        <item name="android:windowAnimationStyle">@style/SlideRightAnimation</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+    <!--扇贝单词的界面进出动画-->
+    <style name="SlideRightAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+        <!--     <item name="android:taskOpenEnterAnimation">@anim/slide_in_right</item>
+             <item name="android:taskOpenExitAnimation">@null</item>
+             <item name="android:taskCloseEnterAnimation">@null</item>
+             <item name="android:taskCloseExitAnimation">@anim/slide_out_right</item>
+             <item name="android:taskToFrontEnterAnimation">@anim/slide_in_right</item>
+             <item name="android:taskToFrontExitAnimation">@null</item>
+             <item name="android:taskToBackEnterAnimation">@null</item>
+             <item name="android:taskToBackExitAnimation">@anim/slide_out_right</item>-->
+    </style>
+    <!--界面进出动画 END-->
+
+    <style name="tab_nav_btn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_nav_bar</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">5dp</item>
+
+    </style>
+
+    <declare-styleable name="RoundProgressBar">
+        <attr name="backColor" format="color|reference"/>
+        <attr name="frontColor" format="color|reference"/>
+        <attr name="textColor" format="color|reference"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="value" format="integer"/>
+        <attr name="max" format="integer"/>
+        <attr name="barBorderWidth" format="dimension"/>
+        <attr name="mode">
+            <enum name="STROKE" value="0"/>
+            <enum name="STROKE_TEXT" value="1"/>
+            <enum name="FILL" value="2"/>
+        </attr>
+    </declare-styleable>
+
+</resources>

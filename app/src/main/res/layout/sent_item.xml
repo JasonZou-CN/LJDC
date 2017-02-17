@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/sent_item"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:layout_marginTop="5dp"
+              android:layout_marginLeft="10dp"
+              android:layout_gravity="center_horizontal"
+        >
+
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/biz_icon_svg_forum"
+            />
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        <TextView
+                android:id="@+id/en_sent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Compare the use of which and what as determiners and pronouns in questions."
+                />
+
+        <TextView
+                android:id="@+id/ch_sent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="试比较which和what用作限定词和代词时,在疑问句中的用法."
+                />
+
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,193 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              tools:context=".fragments.HomeTabAFragment"
+              android:paddingTop="10dp">
+
+
+    <com.ljdc.views.RoundProgressBar
+            android:id="@+id/roundProgress"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:backColor="@color/gray_cccccc"
+            app:frontColor="@color/colorPrimary"
+            app:mode="STROKE_TEXT"
+            app:textColor="@color/gray_cccccc"
+            app:max="100"
+            app:value="70"
+            app:textSize="18sp"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="5dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="完成度："
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7/10"
+                />
+    </LinearLayout>
+
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_home"
+                android:layout_marginLeft="@dimen/margin_left_mid"
+                android:layout_marginRight="@dimen/margin_left_mid"
+                android:paddingBottom="25dp"
+                android:layout_marginTop="@dimen/margin_left_mid">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="剩余"
+                        android:id="@+id/textView4"
+                        android:layout_marginLeft="30dp"
+                        android:layout_alignParentStart="true"
+                        />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="单词计划"
+                        android:layout_marginEnd="26dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linearLayout"
+                        android:layout_alignTop="@+id/linearLayout2"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="21dp">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="622"
+                            android:id="@+id/textView6"
+                            android:textSize="22sp"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="天"
+                            android:id="@+id/textView8"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:id="@+id/linearLayout2"
+                        android:layout_marginEnd="20dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        >
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:id="@+id/textView7"
+                            android:layout_alignTop="@+id/linearLayout"
+                            android:layout_alignParentEnd="true"
+                            android:textSize="22dp"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="个/天"
+                            />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_height="2dp"
+                    android:background="@color/black_title_3a3a3a"
+                    />
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:paddingTop="5dp"
+                    android:paddingRight="25dp"
+                    android:paddingLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="四级核心词汇"
+                        android:id="@+id/textView10"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:layout_alignParentStart="true"
+                        />
+
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="改计划"
+                        android:id="@+id/button"
+                        android:background="@drawable/shape_btn_normal_grey"
+                        android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+            <Button
+                    android:id="@+id/study"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:text="开始学习"
+                    android:textColor="@color/white"
+                    android:background="@drawable/bg_btn_selector"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

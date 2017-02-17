@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activitys.RegisterByPhone">
+
+    <include layout="@layout/view_head_title"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_left_mid"
+            android:layout_marginRight="@dimen/margin_left_mid">
+
+
+        <ImageView
+                android:layout_width="@dimen/ico_input"
+                android:layout_height="@dimen/ico_input"
+                android:background="@drawable/ic_perm_identity_grey_400_36dp"
+                android:id="@+id/imageView"/>
+
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ico_input"
+                android:id="@+id/et_phone"
+                android:background="@android:color/transparent"
+                android:inputType="number"
+                android:hint="请输入手机号（中国大陆账号）"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/dim_foreground_disabled_material_dark"
+            android:layout_marginTop="10dp"/>
+
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/margin_left_mid"
+            android:layout_marginRight="@dimen/margin_left_mid"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+
+                <ImageView
+                        android:layout_width="@dimen/ico_input"
+                        android:layout_height="@dimen/ico_input"
+                        android:background="@drawable/ic_lock_outline_grey_400_36dp"
+                        />
+
+                <EditText
+                        android:id="@+id/et_authCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/ico_input"
+                        android:background="@android:color/transparent"
+                        android:hint="验证码"
+                        android:inputType="number"
+                        android:layout_marginLeft="10dp"/>
+
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/dim_foreground_disabled_material_dark"
+                    android:layout_marginTop="10dp"/>
+        </LinearLayout>
+
+        <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:layout_gravity="bottom"
+                android:layout_height="wrap_content"
+                android:text="获取验证码"
+                android:background="@drawable/bg_phone_auth"
+                android:id="@+id/btn_auth"/>
+
+    </LinearLayout>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_button_height"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="60dp"
+            android:textColor="@color/white"
+            android:text="下一步"
+            android:background="@color/colorPrimary"
+            android:id="@+id/btn_next"
+            android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_createByEmail"
+            android:layout_gravity="center_horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="用邮箱注册"
+                android:id="@+id/textView2"/>
+
+        <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/next_btn"
+                android:id="@+id/imageView2"/>
+    </LinearLayout>
+
+</LinearLayout>

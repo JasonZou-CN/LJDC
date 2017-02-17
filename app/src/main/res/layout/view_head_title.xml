@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_height"
+    android:background="@color/black_title_3a3a3a" >
+
+    <!-- android:background="@drawable/xml_title_bg" -->
+
+    <RelativeLayout
+            android:id="@+id/title_left_layout"
+            android:layout_width="@dimen/title_height"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:background="@drawable/ico_back_2x">
+
+        <!-- 此项目背景方块不用变色 -->
+        <!-- android:background="@drawable/back_bg_selector" -->
+
+        <TextView
+            android:id="@+id/title_left_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/title_center_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/white"
+        android:text="@string/title"
+        android:textSize="@dimen/text_title"/>
+
+    <RelativeLayout
+        android:id="@+id/title_right_second_layout"
+        android:layout_width="@dimen/title_height"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="0dp"
+        android:layout_toLeftOf="@+id/title_right_layout"
+        android:visibility="gone" >
+
+        <!-- android:background="@drawable/back_bg_selector" -->
+
+        <TextView
+            android:id="@+id/title_right_second_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/title_right_layout"
+        android:layout_width="@dimen/title_height"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="0dp"
+        android:visibility="gone"
+            >
+
+        <!-- android:background="@drawable/back_bg_selector" -->
+
+        <TextView
+            android:id="@+id/title_right_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+            <!--android:text="下一步"-->
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:weightSum="1">
+
+    <!-- 此宽度是除开第一列的右边宽度总和：90*9 -->
+
+
+
+    <LinearLayout
+            android:id="@+id/contacts_nav"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black_title_3a3a3a"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+        <RadioGroup
+                android:id="@+id/rg_opt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+            <RadioButton
+                    android:id="@+id/radio_left"
+                    style="@style/tab_nav_btn"
+                    android:background="@drawable/bg_left_tab_selector"
+                    android:checked="false"
+                    android:text="背单词"/>
+
+            <RadioButton
+                    android:id="@+id/radio_middle"
+                    style="@style/tab_nav_btn"
+                    android:background="@drawable/bg_mid_tab_selector"
+                    android:text="进度"
+                    android:checked="true"/>
+
+            <RadioButton
+                    android:id="@+id/radio_right"
+                    style="@style/tab_nav_btn"
+                    android:background="@drawable/bg_right_tab_selector"
+                    android:text="词库"
+                    android:checked="false"/>
+
+        </RadioGroup>
+
+        <View
+                android:layout_width="fill_parent"
+                android:layout_height="5dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/frag_my_contacts_container"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+        <!-- <include word_info_item="@word_info_item/frag_my_contacts_son_friends" /> -->
+    </LinearLayout>
+
+</LinearLayout>

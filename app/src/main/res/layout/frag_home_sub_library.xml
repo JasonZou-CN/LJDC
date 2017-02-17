@@ -1,0 +1,164 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".fragments.HomeTabCFragment"
+              android:paddingTop="10dp">
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+
+                android:text="正在学习"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray_cccccc"
+                />
+
+        <LinearLayout
+
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/margin_left_mid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                >
+
+            <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:id="@+id/imageView3"
+                    android:src="@drawable/book_beishida_8_down"
+                    />
+
+            <RelativeLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_left_mid"
+                    >
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="英语四级核心词汇"
+                        android:id="@+id/textView3"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"/>
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true">
+
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            >
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4325"
+                                android:id="@+id/textView5"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="词汇"
+                                android:id="@+id/textView9"/>
+                    </LinearLayout>
+
+                    <TextView
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/gray_cccccc"
+                            />
+
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="1.5"
+                            android:layout_marginLeft="5dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10.02%"
+                                android:id="@+id/textView11"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="学习进度"
+                                android:id="@+id/textView12"/>
+                    </LinearLayout>
+
+                    <TextView
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/gray_cccccc"
+                            />
+
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2017.11.1"
+                                android:id="@+id/textView13"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="完成时间"
+                                android:id="@+id/textView14"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray_cccccc"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lv_librarys"
+            android:layout_marginLeft="10dp"/>
+</LinearLayout>
