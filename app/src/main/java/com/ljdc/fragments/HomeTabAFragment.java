@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import com.ljdc.R;
+import com.ljdc.activitys.ChangePlanActivity;
 import com.ljdc.activitys.StudyWordActivity;
 import com.ljdc.utils.Act;
 import com.ljdc.views.RoundProgressBar;
@@ -19,6 +21,7 @@ public class HomeTabAFragment extends Fragment implements View.OnClickListener{
 
     private ViewGroup container;
     private RoundProgressBar progressRound;
+    private Button changePlan;
 
 
     public HomeTabAFragment() {
@@ -36,6 +39,9 @@ public class HomeTabAFragment extends Fragment implements View.OnClickListener{
         progressRound.setMax(100);
         progressRound.setValue(80);
 
+        changePlan = (Button) container.findViewById(R.id.changePlan);
+        changePlan.setOnClickListener(this);
+
         return container;
 
 
@@ -46,6 +52,9 @@ public class HomeTabAFragment extends Fragment implements View.OnClickListener{
         switch (view.getId()) {
             case R.id.study:
                 Act.toAct(getActivity(), StudyWordActivity.class);
+                break;
+            case R.id.changePlan:
+                Act.toAct(getContext(), ChangePlanActivity.class);
                 break;
         }
     }

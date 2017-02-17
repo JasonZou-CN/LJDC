@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="改计划"
-                        android:id="@+id/button"
+                        android:id="@+id/changePlan"
                         android:background="@drawable/shape_btn_normal_grey"
                         android:layout_alignParentEnd="true"/>
             </RelativeLayout>

@@ -3,11 +3,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".fragments.HomeTabCFragment"
-              android:paddingTop="10dp">
+              tools:context=".activitys.ChangePlanActivity"
+        >
 
+    <include layout="@layout/view_head_title"/>
 
     <LinearLayout
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -178,8 +180,95 @@
                     android:layout_height="wrap_content"
                     android:text="英语四级核心词汇 （剩余3472个单词），计划完成时间 2017-02-12"
                     android:id="@+id/textView16"/>
+
+            <LinearLayout
+                    android:id="@+id/planContainer"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="每日背单词"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center_horizontal">
+
+                        <NumberPicker
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:orientation="vertical"
+                                android:id="@+id/wordsPicker"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="天"
+                                android:id="@+id/textView19"
+                                android:layout_gravity="center_vertical"
+                                android:textSize="18dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="完成天数"
+                            android:layout_gravity="center_horizontal"/>
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginLeft="25dp"
+                            android:gravity="center_horizontal"
+                            android:layout_height="match_parent">
+
+                        <NumberPicker
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:orientation="vertical"
+                                android:id="@+id/dayPicker"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="个"
+                                android:layout_gravity="center_vertical"
+                                android:textSize="18dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
-
-
 </LinearLayout>
+
+

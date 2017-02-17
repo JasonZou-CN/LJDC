@@ -7,7 +7,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.ljdc.R;
+import com.ljdc.activitys.ChangePlanActivity;
 import com.ljdc.model.LibraryInfo;
+import com.ljdc.utils.Act;
 
 import java.util.List;
 
@@ -80,6 +82,7 @@ public class LibrarysAdapterLV extends BaseAdapter {
 				// TODO Auto-generated method stub
 				int pos = Integer.valueOf((Integer) v.getTag());
 				Toast.makeText(context, "position:" + position, Toast.LENGTH_SHORT).show();
+				Act.toAct(context, ChangePlanActivity.class);
 
 			}
 		});
