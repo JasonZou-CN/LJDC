@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.ljdc.R;
 import com.ljdc.fragments.BlankFragment;
 import com.ljdc.fragments.HomeFragment;
+import com.ljdc.fragments.MineFragment;
+import com.ljdc.fragments.ReviewFragment;
 
 import static com.ljdc.R.id.title_left_layout;
 
@@ -131,12 +133,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     break;
                 case 1:
                     if (null == fragments[1]) {
-                        fragments[1] = new BlankFragment();
+                        fragments[1] = new ReviewFragment();
                     }
                     break;
                 case 2:
                     if (null == fragments[2]) {
-                        fragments[2] = new BlankFragment();
+                        fragments[2] = new MineFragment();
                     }
                     break;
             }

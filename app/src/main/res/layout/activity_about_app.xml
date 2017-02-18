@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/view_head_title"/>
+
+    <ImageView
+            android:layout_marginTop="@dimen/margin_left_mid"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_launcher"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="乐记单词"
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="版本 ：V4.6.2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_left_mid"
+
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开发者邮箱：frank_zouxu@163.com"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_left_mid"
+
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All Rights Reserved"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_left_mid"
+
+            />
+
+</LinearLayout>

@@ -13,8 +13,7 @@
         <activity
                 android:name=".activitys.MainActivity"
                 android:label="乐记单词"
-                android:screenOrientation="portrait"
-                >
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -40,11 +39,22 @@
         </activity>
         <activity
                 android:name=".activitys.StudyWordActivity"
-                android:screenOrientation="portrait"
-                >
+                android:screenOrientation="portrait">
         </activity>
         <activity
                 android:name=".activitys.ChangePlanActivity"
+                android:screenOrientation="portrait"/>
+        <activity android:name=".activitys.WordExamActivity">
+        </activity>
+        <activity
+                android:name=".activitys.PersonInfoActivity"
+                android:screenOrientation="portrait"
+                />
+        <activity
+                android:name=".activitys.FeedbackActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activitys.AboutAppActivity"
                 android:screenOrientation="portrait"/>
     </application>
 
