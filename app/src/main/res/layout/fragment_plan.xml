@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/gray_cccccc"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="词汇构成"
+                android:id="@+id/textView17"/>
+
+    </LinearLayout>
+
+
+    <com.github.mikephil.charting.charts.PieChart
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/pieChart"
+            android:layout_gravity="center_vertical"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/gray_cccccc">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="熟练度详情"
+                android:id="@+id/textView18"/>
+    </LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="熟悉度"
+                android:id="@+id/textView25"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="false"
+                android:layout_marginLeft="20dp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合计"
+                android:id="@+id/textView27"
+                android:layout_marginEnd="52dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp">
+
+        <TextView
+                android:id="@+id/tv_newWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="154"
+                android:layout_marginEnd="53dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_mid"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+            <View
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@color/black_title_3a3a3a"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="生词"
+                    android:layout_marginLeft="10dp"
+                    />
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="465"
+                android:layout_marginEnd="53dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_mid"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+            <View
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@color/black_title_3a3a3a"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="认识"
+                    android:layout_marginLeft="10dp"
+                    />
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="798"
+                android:layout_marginEnd="54dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_mid"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+            <View
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@color/black_title_3a3a3a"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="熟悉"
+                    android:layout_marginLeft="10dp"
+                    />
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="89"
+                android:layout_marginEnd="54dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_mid"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+            <View
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@color/black_title_3a3a3a"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="掌握"
+                    android:layout_marginLeft="10dp"
+                    />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -14,7 +14,8 @@
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:background="@color/gray_cccccc"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -32,11 +33,10 @@
             android:gravity="center_horizontal"
             android:layout_height="wrap_content">
 
-        <ImageView
+        <com.github.mikephil.charting.charts.LineChart
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/add_school_dialog_img"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="200dp"
+                android:id="@+id/lineChart"/>
     </LinearLayout>
 
     <LinearLayout
@@ -46,7 +46,8 @@
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:background="@color/gray_cccccc">
+            android:background="@color/gray_cccccc"
+            android:layout_marginTop="10dp">
 
         <TextView
                 android:layout_width="wrap_content"
