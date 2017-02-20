@@ -14,7 +14,7 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:background="@drawable/ico_back_2x">
+            android:background="@drawable/ic_arrow_back_white_18dp">
 
         <!-- 此项目背景方块不用变色 -->
         <!-- android:background="@drawable/back_bg_selector" -->
@@ -73,7 +73,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:text="下一步"
+                />
             <!--android:text="下一步"-->
     </RelativeLayout>
 

@@ -16,13 +16,14 @@ import com.ljdc.fragments.BlankFragment;
 import com.ljdc.fragments.HomeFragment;
 import com.ljdc.fragments.MineFragment;
 import com.ljdc.fragments.ReviewFragment;
+import com.ljdc.utils.Act;
 
 import static com.ljdc.R.id.title_left_layout;
 
 @SuppressWarnings("ALL")
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
-    public TextView title;
+    public TextView title,right;
     private View back;
     private FragmentManager fm = null;
     private Fragment[] fragments = {null, null, null};
@@ -43,6 +44,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void initView() {
 
         title = (TextView) findViewById(R.id.title_center_tv);
+        findViewById(R.id.title_right_layout).setVisibility(View.VISIBLE);
+        right = (TextView) findViewById(R.id.title_right_tv);
+        right.setText("搜索");
+        right.setOnClickListener(this);
 
         rbs[0] = (RadioButton) findViewById(R.id.rb_home);
         rbs[1] = (RadioButton) findViewById(R.id.rb_review);
@@ -108,6 +113,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case title_left_layout:
+                break;
+            case R.id.title_right_tv:
+                Act.toAct(this,SearchActivity.class);
                 break;
             default:
                 break;

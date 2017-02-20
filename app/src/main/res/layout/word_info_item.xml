@@ -15,7 +15,8 @@
 
         <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
                 android:paddingTop="5dp"
                 android:gravity="center_horizontal"
                 android:layout_height="wrap_content">
@@ -36,6 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/play_ico"
                     />
         </LinearLayout>
@@ -46,8 +48,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:layout_marginTop="10dp"
-
-
                 android:text="[wɒt]"
                 android:layout_gravity="center_horizontal"
                 />
@@ -62,7 +62,7 @@
                 android:paddingBottom="20dp">
 
             <TextView
-                    android:id="@+id/desc_item"
+                    android:id="@+id/wordDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="pron. 什么，多少；…的事物"
@@ -72,89 +72,49 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-            android:id="@+id/sent_container"
-            android:orientation="vertical"
+    <ScrollView
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_left_mid"
             android:background="@drawable/shape_rect"
             android:layout_marginLeft="@dimen/margin_left_mid"
             android:layout_marginRight="@dimen/margin_left_mid"
-            android:layout_marginTop="@dimen/margin_left_mid"
-            android:paddingBottom="10dp"
-            android:layout_height="wrap_content">
+            >
 
         <LinearLayout
-                android:orientation="horizontal"
+                android:id="@+id/sent_container"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp">
-
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:background="@drawable/fb_msg_tip"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_gravity="center_vertical"/>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="基础例句："
-                    android:layout_marginLeft="5dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/sent_item"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_horizontal">
-
-
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/biz_icon_svg_forum"
-                    />
+                android:paddingBottom="10dp"
+                android:layout_height="wrap_content">
 
             <LinearLayout
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    >
+                    android:paddingTop="5dp">
+
+                <ImageView
+                        android:layout_width="20dp"
+                        android:background="@drawable/sentence_icon"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center_vertical"/>
 
                 <TextView
-                        android:id="@+id/en_sent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Compare the use of which and what as determiners and pronouns in questions."
-                        />
-
-                <TextView
-                        android:id="@+id/ch_sent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="试比较which和what用作限定词和代词时,在疑问句中的用法."
-                        />
-
+                        android:text="基础例句："
+                        android:textSize="16sp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="5dp"/>
 
             </LinearLayout>
+
+            <include layout="@layout/sent_item"/>
+
         </LinearLayout>
+    </ScrollView>
 
-        <View
-                android:id="@+id/horizontal_line"
-                android:layout_width="wrap_content"
-                android:background="@color/gray_cccccc"
-                android:layout_height="1dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                />
-
-
-
-    </LinearLayout>
 </LinearLayout>

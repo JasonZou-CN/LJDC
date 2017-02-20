@@ -24,6 +24,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
     private ViewPager vp_container;
     private QuickPageAdapter pageAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
 
             @Override
             public void onPageSelected(int position) {
-                title.setText("学习 ："+(position+1)+"/5");
+                title.setText("学习 ：" + (position + 1) + "/5");
 
             }
 
@@ -62,7 +63,6 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
 
             }
         });
-
 
 
     }
@@ -95,6 +95,8 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
         private LayoutInflater inflater;
         private List<View> viewList;
         private View view;
+        private TextView wordDesc;//释义
+
 
         public QuickPageAdapter(List<Word> mDataList, LayoutInflater inflater) {
             this.mDataList = mDataList;
@@ -121,27 +123,22 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                 viewList = new ArrayList<View>();
                 //TODO 数据初始化
             }
-            if(viewList.size()<mDataList.size()){
+            if (viewList.size() < mDataList.size()) {
 
                 view = inflater.inflate(R.layout.word_info_item, vp_container, false);
                 view.findViewById(R.id.pron).setOnClickListener(StudyWordActivity.this);
+                wordDesc = (TextView) view.findViewById(R.id.wordDesc);
 
-                {
+                wordDesc.setText(mDataList.get(position).info);
 
-                    LinearLayout sent_container = (LinearLayout) view.findViewById(R.id.sent_container);
-                    LinearLayout desc_container = (LinearLayout) view.findViewById(R.id.desc_container);
-                    //TODO 动态添加组件
-                    View sentItem = inflater.inflate(R.layout.sent_item,sent_container,false);
+                LinearLayout sent_container = (LinearLayout) view.findViewById(R.id.sent_container);
+//                    LinearLayout desc_container = (LinearLayout) view.findViewById(R.id.desc_container);
+                //TODO 动态添加组件 遍历List  【例句】
+                for (int i = 0; i < 8; i++) {
+                    View sentItem = inflater.inflate(R.layout.sent_item, sent_container, false);
                     sent_container.addView(sentItem);
-
-                    ((TextView)sentItem.findViewById(R.id.en_sent)).setText("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
-                    ViewGroup.LayoutParams layoutParams = ((TextView) view.findViewById(R.id.desc_item)).getLayoutParams();
-                    TextView textView = new TextView(StudyWordActivity.this);
-                    textView.setText("XXXXXXXXXXX");
-                    textView.setLayoutParams(layoutParams);
-                    desc_container.addView(textView);
-
+                    ((TextView) sentItem.findViewById(R.id.en_sent)).setText("XXXXXXXXXXXXXXXXXXXXXX " + i);
+                    ((TextView) sentItem.findViewById(R.id.ch_sent)).setText("YYYYYYYYYYYYYYYYYYYYYY " + i);
                 }
                 viewList.add(position, view);
             }
