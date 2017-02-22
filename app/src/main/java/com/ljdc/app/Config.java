@@ -19,4 +19,6 @@ public class Config {
     public static String SEARCH_WORD_API_URL_AFTER = "&type=json&key=" + SEARCH_WORD_API_KEY;
 
     public static String HOST = "";
+
+    public static String USER_ID;//TODO  注册时赋值 用户ID
 }
