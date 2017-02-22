@@ -3,12 +3,19 @@ package com.ljdc.activitys;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.ljdc.R;
+import com.ljdc.app.Config;
 import com.ljdc.utils.Act;
 import com.ljdc.utils.ToastUtils;
 
@@ -67,8 +74,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     ToastUtils.showShort(this, "请检查登录信息");
                 } else {
                     //TODO 发起网络请求
-/*                    RequestQueue mQueue = Volley.newRequestQueue(this);
-                    StringRequest request = new StringRequest("https://www.baidu.com", new Response.Listener<String>() {
+                    RequestQueue mQueue = Volley.newRequestQueue(this);
+                    StringRequest request = new StringRequest(Config.HOST+Config.REGISTER+"?email=frank_zouxu@163.com&password=123&nickname=jasonzou", new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("LoginActivity", response);
@@ -79,7 +86,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             Log.e("LoginActivity",error.getMessage(),error);
                         }
                     });
-                    mQueue.add(request);*/
+                    mQueue.add(request);
                 }
                 Act.toAct(this,MainActivity.class);
                 break;

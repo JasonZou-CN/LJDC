@@ -2,12 +2,19 @@ package com.ljdc.activitys;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.ljdc.R;
+import com.ljdc.app.Config;
 import com.ljdc.utils.Act;
 
 @SuppressWarnings("deprecation")
@@ -58,6 +65,20 @@ public class RegisterByEmail extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_registe:
+                //TODO 发起网络请求
+                RequestQueue mQueue = Volley.newRequestQueue(this);
+                StringRequest request = new StringRequest(Config.HOST+Config.REGISTER+"?email=frank_zouxu@163.com&password=123&nickname=jasonzou", new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("LoginActivity", response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("LoginActivity",error.getMessage(),error);
+                    }
+                });
+                mQueue.add(request);
                 break;
             case R.id.ll_createByPhone:
                 Act.toAct(this,RegisterByPhone.class);
