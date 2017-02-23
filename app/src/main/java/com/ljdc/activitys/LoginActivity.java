@@ -7,14 +7,18 @@ import android.view.View;
 import android.widget.*;
 import com.android.volley.Response;
 import com.google.gson.Gson;
+import com.j256.ormlite.dao.Dao;
 import com.ljdc.R;
 import com.ljdc.app.Config;
+import com.ljdc.database.DBHelper;
 import com.ljdc.model.Message;
+import com.ljdc.pojo.UserServer;
 import com.ljdc.utils.Act;
 import com.ljdc.utils.ToastUtils;
 import com.ljdc.utils.VolleyPostRequest;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,6 +70,15 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
 
                 break;
             case R.id.btn_login:
+                try {
+                    UserServer userServer = new UserServer();
+                    userServer.email = "3334464@qq.com";
+                    userServer.password = "21111";
+                    Dao dao = DBHelper.getHelper(this).getDao(UserServer.class);
+                    dao.create(userServer);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 String account = et_account.getText().toString();
                 String password = et_password.getText().toString();
                 if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
