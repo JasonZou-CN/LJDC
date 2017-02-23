@@ -30,7 +30,7 @@ public class JsonUtils {
      */
     public static Object[] regist(List<Parameter> params) throws Exception {
         Object[] objs = new Object[3];
-        String result = http.httpPost(Config.HOST, params);
+        String result = http.httpPost(Config.HOST_URL, params);
         SysPrintUtil.pt(TAG, result);
         JSONObject obj = new JSONObject(result);
         int resultcode = obj.getInt("code");
@@ -53,7 +53,7 @@ public class JsonUtils {
     public static Object[] login(List<Parameter> params) throws Exception {
         // TODO Auto-generated method stub
         Object[] objs = new Object[3];
-        String result = http.httpPost(Config.HOST, params);
+        String result = http.httpPost(Config.HOST_URL, params);
         SysPrintUtil.pt(TAG, result);
         JSONObject obj = new JSONObject(result);
         int resultcode = obj.getInt("code");

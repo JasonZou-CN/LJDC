@@ -19,9 +19,10 @@ public class Config {
     public static String SEARCH_WORD_API_URL_AFTER = "&type=json&key=" + SEARCH_WORD_API_KEY;
 
     public static String LOCAL_IP = "192.168.191.1";
-    public static String HOST = "http://"+LOCAL_IP+":8080/";
-    public static String LOGIN = "";
-    public static String REGISTER = "register";
+    public static String HOST_URL = "http://"+LOCAL_IP+":8080/";
+    public static String REGISTER_URL = HOST_URL +"register";
+    public static String LOGIN_URL = HOST_URL +"login";
+
 
 
 

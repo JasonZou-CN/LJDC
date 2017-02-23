@@ -3,26 +3,25 @@ package com.ljdc.activitys;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import com.android.volley.RequestQueue;
+import android.widget.*;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ljdc.R;
 import com.ljdc.app.Config;
+import com.ljdc.model.Message;
 import com.ljdc.utils.Act;
 import com.ljdc.utils.ToastUtils;
+import com.ljdc.utils.VolleyPostRequest;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  */
-public class LoginActivity extends Activity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener, Response.Listener<String> {
     private TextView tv_title, tv_forgetPwd;
     private EditText et_account, et_password;
     private Button btn_login;
@@ -67,29 +66,45 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.btn_login:
-//                ToastUtils.showShort(this,"xxx");
                 String account = et_account.getText().toString();
                 String password = et_password.getText().toString();
                 if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
-                    ToastUtils.showShort(this, "请检查登录信息");
+                    ToastUtils.showShort(this, "信息不能为空");
                 } else {
                     //TODO 发起网络请求
-                    RequestQueue mQueue = Volley.newRequestQueue(this);
-                    StringRequest request = new StringRequest(Config.HOST+Config.REGISTER+"?email=frank_zouxu@163.com&password=123&nickname=jasonzou", new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("LoginActivity", response);
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("LoginActivity",error.getMessage(),error);
-                        }
-                    });
-                    mQueue.add(request);
+                    Map<String, String> parms = new HashMap<String, String>();
+                    parms.put("phone", et_account.getText().toString());
+                    parms.put("email", et_account.getText().toString());
+                    parms.put("nickname", et_account.getText().toString());
+                    parms.put("password", et_password.getText().toString());
+                    new VolleyPostRequest(this).postRequest(parms, Config.LOGIN_URL, this);
                 }
-                Act.toAct(this,MainActivity.class);
                 break;
+        }
+    }
+
+    /**
+     * 处理网络请求的回调
+     * Called when a response is received.
+     *
+     * @param response
+     */
+    @Override
+    public void onResponse(String response) {
+        try {
+            response = new String(response.getBytes("iso-8859-1"), "utf-8");
+            //TODO 解析返回值
+            Message message = new Gson().fromJson(response, Message.class);
+            if (message.getCode() == 200) {
+                Toast.makeText(this, "登录成功，正在跳转", Toast.LENGTH_SHORT).show();
+                Act.toAct(this, MainActivity.class);
+                finish();
+            } else {
+                Toast.makeText(this, "登录失败，请检查登录信息", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -31,7 +31,8 @@
                 android:background="@android:color/transparent"
                 android:hint="用户名/邮箱/手机号"
                 android:layout_weight="1"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:text="123"/>
 
     </LinearLayout>
 
@@ -67,7 +68,8 @@
                 android:hint="密码"
                 android:layout_weight="1"
                 android:inputType="textPassword"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:text="123"/>
 
     </LinearLayout>
 

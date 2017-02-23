@@ -2,23 +2,28 @@ package com.ljdc.activitys;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ljdc.R;
 import com.ljdc.app.Config;
+import com.ljdc.model.Message;
 import com.ljdc.utils.Act;
+import com.ljdc.utils.VolleyPostRequest;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public class RegisterByEmail extends Activity implements View.OnClickListener {
+public class RegisterByEmail extends Activity implements View.OnClickListener ,Response.Listener<String>{
 
 
     private android.widget.EditText et_account;
@@ -65,28 +70,51 @@ public class RegisterByEmail extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_registe:
+                if (TextUtils.isEmpty(et_account.getText().toString()) | TextUtils.isEmpty(et_email.getText().toString()) | TextUtils.isEmpty(et_password.getText().toString()) | TextUtils.isEmpty(et_password_confirm.getText().toString()))
+                    break;
+                else if (et_password.getText().toString().contentEquals(et_password_confirm.getText().toString())) {
+                    Toast.makeText(this, "密码不一致", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                Map<String, String> parms = new HashMap<String, String>();
+                parms.put("nickname", et_account.getText().toString());
+                parms.put("email", et_email.getText().toString());
+                parms.put("password", et_password_confirm.getText().toString());
+
                 //TODO 发起网络请求
-                RequestQueue mQueue = Volley.newRequestQueue(this);
-                StringRequest request = new StringRequest(Config.HOST+Config.REGISTER+"?email=frank_zouxu@163.com&password=123&nickname=jasonzou", new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("LoginActivity", response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("LoginActivity",error.getMessage(),error);
-                    }
-                });
-                mQueue.add(request);
+                new VolleyPostRequest(this).postRequest(parms, Config.REGISTER_URL,this);
+
                 break;
             case R.id.ll_createByPhone:
-                Act.toAct(this,RegisterByPhone.class);
+                Act.toAct(this, RegisterByPhone.class);
                 break;
             case R.id.title_left_layout:
                 this.finish();
                 break;
 
+        }
+    }
+
+    /**
+     * Called when a response is received.
+     *
+     * @param response
+     */
+    @Override
+    public void onResponse(String response) {
+        try {
+            response = new String(response.getBytes("iso-8859-1"), "utf-8");
+            //TODO 解析返回值
+            Message message = new Gson().fromJson(response, Message.class);
+            if (message.getCode() == 200) {
+                Toast.makeText(this, "注册成功，正在进入", Toast.LENGTH_SHORT).show();
+                Act.toAct(this, MainActivity.class);
+            } else {
+                Toast.makeText(this, "注册失败，服务器正在抢修", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 }
