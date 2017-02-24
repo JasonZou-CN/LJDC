@@ -12,14 +12,14 @@ import com.j256.ormlite.table.DatabaseTable;
  * Time:下午 7:57
  * Desc:略
  */
-@DatabaseTable(tableName = "lib2_middle_school_server")
+@DatabaseTable(tableName = "lib2")
 public class Lib2MiddleSchoolServer {
     @DatabaseField(columnName = "lib2_id",generatedId = true)
     public int lib2Id;
     
-    @ForeignCollectionField(eager = true)
-    public ForeignCollection<LearnLib2Server> learnLib2Server;
+    @ForeignCollectionField(eager = false)
+    public ForeignCollection<LearnLib2Server> learnLib2;
     
     @DatabaseField(foreign = true,columnName = "word_id")
-    public WordLibServer wordLibServer;
+    public WordLibServer wordLib;
 }

@@ -33,7 +33,6 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
      */
     private Map<String, Dao> daos = new HashMap<String, Dao>();
 
-
     /**
      * 构造方法
      *
@@ -61,6 +60,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         return instance;
     }
 
+
     /**
      * 这里创建表
      */
@@ -75,6 +75,14 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Lib2MiddleSchoolServer.class);
             TableUtils.createTable(connectionSource, LearnLib1Server.class);
             TableUtils.createTable(connectionSource, LearnLib2Server.class);
+
+            //TODO 使用INSERT 初始化数据表数据，通过文本文件导入SQL
+
+//            sqliteDatabase.execSQL("INSERT INTO user_server (nickname,user_id) VALUES (\"jasonzou\",1000);");
+//            sqliteDatabase.execSQL("INSERT INTO user_server (nickname,user_id) VALUES (\"frank\",2000);");
+//            sqliteDatabase.execSQL("INSERT INTO user_server (nickname) VALUES (\"jasonzou\");");
+//            sqliteDatabase.execSQL("INSERT INTO user_server (nickname) VALUES (\"frank\");");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,11 +114,12 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public synchronized Dao getDao(Class clazz) throws SQLException {
         Dao dao = null;
         String className = clazz.getSimpleName();
-        if (!daos.containsKey(className)) {
+        if (daos.containsKey(className)) {
+            dao = daos.get(className);
+        }
+        if (dao == null) {
             dao = super.getDao(clazz);
             daos.put(className, dao);
-        }else {
-            dao = daos.get(className);
         }
         return dao;
     }

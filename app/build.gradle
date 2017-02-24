@@ -33,4 +33,9 @@ dependencies {
 
 
 
-android { useLibrary 'org.apache.http.legacy' }
+android {
+    useLibrary 'org.apache.http.legacy'
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}

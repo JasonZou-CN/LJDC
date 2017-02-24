@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  * Time:下午 7:57
  * Desc:略
  */
-@DatabaseTable(tableName = "learn_lib1_server")
+@DatabaseTable(tableName = "learn_lib1")
 public class LearnLib1Server {
 
     @DatabaseField(generatedId = true,columnName = "learn_lib1_id")
@@ -24,13 +24,16 @@ public class LearnLib1Server {
     @DatabaseField(columnName = "updata_time")
     public Timestamp updataTime;
 
-    @DatabaseField(columnName = "modified")
-    public Timestamp modified;
+    @DatabaseField(columnName = "status_modify")
+    public int statusModify;
+
+    @DatabaseField(columnName = "anchor")
+    public Timestamp anchor;
 
     @DatabaseField(foreign = true,columnName = "lib1_id")
-    public Lib1EnglishGrand4CoreServer lib1EnglishGrand4CoreServer;
+    public Lib1EnglishGrand4CoreServer lib1_word;
 
     @DatabaseField(foreign = true,columnName = "user_id")
-    public UserServer userServer;
+    public UserServer user;
 
 }

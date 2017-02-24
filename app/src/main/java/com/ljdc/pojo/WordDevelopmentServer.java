@@ -13,7 +13,7 @@ import java.sql.Timestamp;
  * Time:下午 7:57
  * Desc:略
  */
-@DatabaseTable(tableName = "word_development_server")
+@DatabaseTable(tableName = "word_development")
 public class WordDevelopmentServer {
     @DatabaseField(generatedId = true,columnName = "word_dev_id")
     public int wordDevId;
@@ -27,10 +27,13 @@ public class WordDevelopmentServer {
     @DatabaseField(columnName = "grasp_level")
     public Integer graspLevel;
 
-    @DatabaseField(columnName = "modified")
-    public Timestamp modified;
+    @DatabaseField(columnName = "status_modify")
+    public int statusModify;
 
-    @DatabaseField(columnName = "user_id",foreign = true)
-    public UserServer userServerByUserId;
+    @DatabaseField(columnName = "anchor")
+    public Timestamp anchor;
+
+    @DatabaseField(columnName = "user_id",foreign = true,foreignAutoRefresh = true)
+    public UserServer user;
 
 }

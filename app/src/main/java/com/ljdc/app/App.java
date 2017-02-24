@@ -1,6 +1,7 @@
 package com.ljdc.app;
 
 import android.app.Application;
+import android.content.Context;
 
 /**
  * Created with IntelliJ IDEA
@@ -10,8 +11,14 @@ import android.app.Application;
  * Desc:略
  */
 public class App extends Application {
+    private static Context context;
     @Override
     public void onCreate() {
         super.onCreate();
+        context=getApplicationContext();
+    }
+
+    public static Context getCtx(){
+        return context;
     }
 }

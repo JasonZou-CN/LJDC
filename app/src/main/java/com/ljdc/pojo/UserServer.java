@@ -5,6 +5,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Collection;
+
 
 /**
  * Created with IntelliJ IDEA
@@ -13,7 +15,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * Time:下午 7:57
  * Desc:略
  */
-@DatabaseTable(tableName = "user_server")
+@DatabaseTable(tableName = "user")
 public class UserServer {
     @DatabaseField(columnName = "user_id", generatedId = true)
     public int userId;
@@ -33,13 +35,13 @@ public class UserServer {
     @DatabaseField(columnName = "head_image_url")
     public String headImageUrl;
 
-    @ForeignCollectionField(eager = true)
-    public ForeignCollection<LearnLib1Server> learnLib1Servers;
+    @ForeignCollectionField(eager = false)
+    public ForeignCollection<LearnLib1Server> learnLib1;
 
-    @ForeignCollectionField(eager = true)
-    public ForeignCollection<LearnLib2Server> learnLib2Servers;
+    @ForeignCollectionField(eager = false)
+    public ForeignCollection<LearnLib2Server> learnLib2;
 
-    @ForeignCollectionField(eager = true)
-    public ForeignCollection<WordDevelopmentServer> wordDevelopmentServers;
+    @ForeignCollectionField(eager = false)
+    public Collection<WordDevelopmentServer> wordDevelopment;
 
 }

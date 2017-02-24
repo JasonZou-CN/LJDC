@@ -12,7 +12,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * Time:下午 7:57
  * Desc:略
  */
-@DatabaseTable(tableName = "lib1_english_grand_4_core_server")
+@DatabaseTable(tableName = "lib1")
 public class Lib1EnglishGrand4CoreServer {
     @DatabaseField(columnName = "lib1_id",generatedId = true)
     public int lib1Id;

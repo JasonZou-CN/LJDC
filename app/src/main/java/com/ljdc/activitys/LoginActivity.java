@@ -1,24 +1,26 @@
 package com.ljdc.activitys;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.android.volley.Response;
 import com.google.gson.Gson;
-import com.j256.ormlite.dao.Dao;
 import com.ljdc.R;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
 import com.ljdc.model.Message;
+import com.ljdc.pojo.Lib1EnglishGrand4CoreServer;
 import com.ljdc.pojo.UserServer;
+import com.ljdc.pojo.WordLibServer;
 import com.ljdc.utils.Act;
 import com.ljdc.utils.ToastUtils;
 import com.ljdc.utils.VolleyPostRequest;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,14 +73,35 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
                 break;
             case R.id.btn_login:
                 try {
-                    UserServer userServer = new UserServer();
-                    userServer.email = "3334464@qq.com";
-                    userServer.password = "21111";
-                    Dao dao = DBHelper.getHelper(this).getDao(UserServer.class);
-                    dao.create(userServer);
-                } catch (SQLException e) {
+//                    DBHelper.getHelper(this).getDatabase().execSQL("INSERT INTO word_lib_server (word) VALUES (1000,\"446\");");
+//                    Dao<UserServer,Integer> dao = DBHelper.getHelper(this).getDao(UserServer.class);
+//                    UserServer userServer = (UserServer) dao.queryForId(1000);
+//                    Log.d("LoginActivity", userServer.nickname);
+//                    Toast.makeText(this, "userServer.wordDevelopmentServers :"+userServer.wordDevelopmentServers.size(), Toast.LENGTH_SHORT).show();
+
+                    WordLibServer word = new WordLibServer();
+                    word.word = "word:";
+                    Lib1EnglishGrand4CoreServer lib1 = new Lib1EnglishGrand4CoreServer();
+                    lib1.wordLibServer = word;
+                    DBHelper.getHelper(this).getDao(WordLibServer.class).create(word);
+                    DBHelper.getHelper(this).getDao(Lib1EnglishGrand4CoreServer.class).create(lib1);
+                  /*  DBHelper.getHelper(this).getDao(Lib1EnglishGrand4CoreServer.class).create(lib1);*/
+
+//                    DBHelper.getHelper(this).getDao(UserServer.class);
+                    SQLiteDatabase db = DBHelper.getHelper(this).getReadableDatabase();
+
+                    db.execSQL("INSERT INTO user (nickname) VALUES (\"jasonzou\");");
+                    db.execSQL("INSERT INTO user (nickname) VALUES (\"安抚\");");
+                    db.execSQL("INSERT INTO user (nickname) VALUES (\"阿斯蒂芬\");");
+                    Log.d("LoginActivity", "DBHelper.getHelper(this).getDao(UserServer.class).queryForAll().size():" + DBHelper.getHelper(this).getDao(UserServer.class).queryForAll().size());
+
+
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                /*
                 String account = et_account.getText().toString();
                 String password = et_password.getText().toString();
                 if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
@@ -92,6 +115,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
                     parms.put("password", et_password.getText().toString());
                     new VolleyPostRequest(this).postRequest(parms, Config.LOGIN_URL, this);
                 }
+                */
                 break;
         }
     }
