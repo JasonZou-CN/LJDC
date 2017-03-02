@@ -1,6 +1,8 @@
 package com.ljdc.activitys;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -13,7 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.ljdc.R;
 import com.ljdc.model.Word;
+import com.ljdc.pojo.WordLibServer;
+import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +29,13 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
     private View back;
     private ViewPager vp_container;
     private QuickPageAdapter pageAdapter;
+    private WordLibServer word; //暂存当前显示的单词信息
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study_word);
-
-
         initData();
         initView();
     }
@@ -42,7 +47,13 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
         back.setOnClickListener(this);
 
         title = (TextView) findViewById(R.id.title_center_tv);
-        title.setText("学习 ：1/5");
+        if (word != null) {
+            title.setText("单词详情");
+        } else {
+            //单词计划进来的
+            title.setText("学习 ：1/5");
+        }
+
 
         vp_container = (ViewPager) findViewById(R.id.word_item_container);
         vp_container.setAdapter(pageAdapter);
@@ -54,7 +65,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
 
             @Override
             public void onPageSelected(int position) {
-                title.setText("学习 ：" + (position + 1) + "/5");
+                title.setText("学习 ：" + (position + 1) + "/5");//position 从0 开始
 
             }
 
@@ -68,13 +79,23 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
     }
 
     private void initData() {
-        List<Word> data = new ArrayList<Word>(4);
-        data.add(new Word());
-        data.add(new Word());
-        data.add(new Word());
-        data.add(new Word());
-        data.add(new Word());
-        pageAdapter = new QuickPageAdapter(data, getLayoutInflater());
+        Intent i = getIntent();
+        word = (WordLibServer) i.getSerializableExtra("searchWord");
+        if (word == null) {
+            //TODO 不是查词过来的，在此处产生数据
+/*            List<Word> data = new ArrayList<Word>(4);
+            data.add(new Word());
+            data.add(new Word());
+            data.add(new Word());
+            data.add(new Word());
+            data.add(new Word());
+            pageAdapter = new QuickPageAdapter(data, getLayoutInflater());*/
+        } else {
+            List<WordLibServer> data = new ArrayList<WordLibServer>();
+            data.add(word);
+            pageAdapter = new QuickPageAdapter(data, getLayoutInflater());
+        }
+
 
     }
 
@@ -86,19 +107,33 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                 break;
             case R.id.pron:
                 Toast.makeText(this, "发音", Toast.LENGTH_SHORT).show();
-                break;
+
+                if (word != null) {
+                    MediaPlayer mp = new MediaPlayer();//构建MediaPlayer对象
+                    try {
+                        mp.setDataSource(word.pronUrlEn);//设置文件路径
+                        mp.prepare();//准备
+                        mp.start();//开始播放
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
         }
     }
 
     public class QuickPageAdapter extends PagerAdapter {
-        private List<Word> mDataList;
+        private List<WordLibServer> mDataList;
         private LayoutInflater inflater;
         private List<View> viewList;
-        private View view;
+        private View view;  //资源容器
         private TextView wordDesc;//释义
+        private TextView pron_en_us; //发音 字符串
+        private WordLibServer word;
+        private TextView tv_word;
 
 
-        public QuickPageAdapter(List<Word> mDataList, LayoutInflater inflater) {
+        public QuickPageAdapter(List<WordLibServer> mDataList, LayoutInflater inflater) {
             this.mDataList = mDataList;
             this.inflater = inflater;
         }
@@ -124,21 +159,60 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                 //TODO 数据初始化
             }
             if (viewList.size() < mDataList.size()) {
+                word = mDataList.get(position);
 
                 view = inflater.inflate(R.layout.word_info_item, vp_container, false);
                 view.findViewById(R.id.pron).setOnClickListener(StudyWordActivity.this);
+                pron_en_us = (TextView) view.findViewById(R.id.pron_en_us);
                 wordDesc = (TextView) view.findViewById(R.id.wordDesc);
+                tv_word = (TextView) view.findViewById(R.id.word_item);
 
-                wordDesc.setText(mDataList.get(position).info);
+                StringBuffer str = new StringBuffer();
+                str.append(word.pos1 + " ");
+                str.append(word.acceptation1);
+                if (null != word.acceptation2) {
+                    str.append("\n");
+                    str.append(word.pos2 + " ");
+                    str.append(word.acceptation2);
+                }
+                if (null != word.acceptation3) {
+                    str.append("\n");
+                    str.append(word.pos3 + " ");
+                    str.append(word.acceptation3);
+                }
+                if (null != word.acceptation4) {
+                    str.append("\n");
+                    str.append(word.pos4 + " ");
+                    str.append(word.acceptation4);
+                }
+                wordDesc.setText(str.toString());
+                pron_en_us.setText("[" + word.pronStrEn + "]");
+                tv_word.setText(word.word);
 
-                LinearLayout sent_container = (LinearLayout) view.findViewById(R.id.sent_container);
-//                    LinearLayout desc_container = (LinearLayout) view.findViewById(R.id.desc_container);
+
                 //TODO 动态添加组件 遍历List  【例句】
-                for (int i = 0; i < 8; i++) {
-                    View sentItem = inflater.inflate(R.layout.sent_item, sent_container, false);
-                    sent_container.addView(sentItem);
-                    ((TextView) sentItem.findViewById(R.id.en_sent)).setText("XXXXXXXXXXXXXXXXXXXXXX " + i);
-                    ((TextView) sentItem.findViewById(R.id.ch_sent)).setText("YYYYYYYYYYYYYYYYYYYYYY " + i);
+                LinearLayout sent_container = (LinearLayout) view.findViewById(R.id.sent_container);
+                View sentItem = inflater.inflate(R.layout.sent_item, sent_container, false);
+                sent_container.addView(sentItem);
+                ((TextView) sentItem.findViewById(R.id.en_sent)).setText(word.sentEn1);
+                ((TextView) sentItem.findViewById(R.id.ch_sent)).setText(word.sentTrans1);
+                if (null != word.sentEn2) {
+                    View sentItem2 = inflater.inflate(R.layout.sent_item, sent_container, false);
+                    sent_container.addView(sentItem2);
+                    ((TextView) sentItem2.findViewById(R.id.en_sent)).setText(word.sentEn2);
+                    ((TextView) sentItem2.findViewById(R.id.ch_sent)).setText(word.sentTrans2);
+                }
+                if (null != word.sentEn3) {
+                    View sentItem3 = inflater.inflate(R.layout.sent_item, sent_container, false);
+                    sent_container.addView(sentItem3);
+                    ((TextView) sentItem3.findViewById(R.id.en_sent)).setText(word.sentEn3);
+                    ((TextView) sentItem3.findViewById(R.id.ch_sent)).setText(word.sentTrans3);
+                }
+                if (null != word.sentEn4) {
+                    View sentItem4 = inflater.inflate(R.layout.sent_item, sent_container, false);
+                    sent_container.addView(sentItem4);
+                    ((TextView) sentItem4.findViewById(R.id.en_sent)).setText(word.sentEn4);
+                    ((TextView) sentItem4.findViewById(R.id.ch_sent)).setText(word.sentTrans4);
                 }
                 viewList.add(position, view);
             }
@@ -153,4 +227,5 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
             container.removeView(viewList.get(position));
         }
     }
+
 }

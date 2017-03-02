@@ -135,6 +135,7 @@ public class RegisterByPhone extends Activity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.ll_createByEmail:
                 Act.toAct(this, RegisterByEmail.class);
+                this.finish();
                 break;
             case R.id.btn_auth:
                 if (!Utils.isMobileNO(phone))

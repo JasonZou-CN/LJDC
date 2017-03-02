@@ -16,7 +16,8 @@ public class Config {
     public static String SEARCH_WORD_API_KEY = "25C40D77809C22A3977F8C4B4CF3056D";
 
     public static String SEARCH_WORD_API_URL_PRE = SEARCH_WORD_API_URL + "?w=";
-    public static String SEARCH_WORD_API_URL_AFTER = "&type=json&key=" + SEARCH_WORD_API_KEY;
+    public static String SEARCH_WORD_API_URL_AFTER = "&key=" + SEARCH_WORD_API_KEY;
+    public static String SEARCH_WORD_API_URL_AFTER_BY_JSON = "&type=json&key=" + SEARCH_WORD_API_KEY;
 
     //    public static String LOCAL_IP = "192.168.191.1";
     public static String LOCAL_IP = "10.18.80.163";

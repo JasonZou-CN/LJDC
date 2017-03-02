@@ -102,6 +102,7 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    System.out.println("执行。。。");
                     lvTips.setVisibility(GONE);
                     notifyStartSearching(etInput.getText().toString());
                 }
@@ -146,7 +147,9 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.search_et_input:
-                lvTips.setVisibility(VISIBLE);
+//                lvTips.setVisibility(VISIBLE);
+                //不显示热搜列表 | 搜索历史列表
+                lvTips.setVisibility(GONE);
                 break;
             case R.id.search_iv_delete:
                 etInput.setText("");

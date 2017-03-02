@@ -14,12 +14,14 @@ import com.ljdc.adapters.SearchAdapter;
 import com.ljdc.app.Config;
 import com.ljdc.model.Bean;
 import com.ljdc.model.Word;
-import com.ljdc.utils.JsonUtils;
-import com.ljdc.utils.MyLog;
-import com.ljdc.utils.SyncHttp;
+import com.ljdc.pojo.WordLibServer;
+import com.ljdc.utils.*;
 import com.ljdc.views.SearchView;
+import org.xmlpull.v1.XmlPullParserException;
 
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +70,12 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
      */
     private List<Bean> resultData;
 
+
+    /**
+     * 单词查询所得的结果
+     */
+    private WordLibServer word = null;
+
     /**
      * 设置提示框显示项的个数
      *
@@ -105,6 +113,10 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Toast.makeText(SearchActivity.this, position + "", Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("searchWord",word);
+                Act.toAct(SearchActivity.this,StudyWordActivity.class,bundle);
+                SearchActivity.this.finish();
             }
         });
     }
@@ -186,7 +198,7 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
             }*//*
         }*/
          /*填充查询结果页*/
-         new AsyReq().execute(text);
+        new AsyReq().execute(text);
 
 
 
@@ -220,14 +232,14 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
                  /*填充查询结果页*/
         new AsyReq().execute(text);
         lvResults.setVisibility(View.VISIBLE);
-        //第一次获取结果 还未配置适配器
-        if (lvResults.getAdapter() == null) {
-            //获取搜索数据 设置适配器
-            lvResults.setAdapter(resultAdapter);
-        } else {
-            //更新搜索数据
-            resultAdapter.notifyDataSetChanged();
-        }
+//        //第一次获取结果 还未配置适配器
+//        if (lvResults.getAdapter() == null) {
+//            //获取搜索数据 设置适配器
+//            lvResults.setAdapter(resultAdapter);
+//        } else {
+//            //更新搜索数据
+//            resultAdapter.notifyDataSetChanged();
+//        }
         Toast.makeText(this, "完成搜素", Toast.LENGTH_SHORT).show();
 
 
@@ -241,6 +253,8 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
             if (resultData == null) {
                 // 初始化
                 resultData = new ArrayList<>();
+                resultAdapter = new SearchAdapter(SearchActivity.this, resultData, R.layout.item_bean_list);
+                lvResults.setAdapter(resultAdapter);
             } else {
                 resultData.clear();
             }
@@ -257,23 +271,48 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            try {
+                result = new String(result.getBytes(Config.DEFAULT_STRING_CHARSET),Config.UTF8_CHARSET);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             return result;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Word word = JsonUtils.getWordInfo(result);
-            Bean bean = new Bean(R.drawable.ic_launcher, "", "", "");
-            bean.setTitle(word.getName());
-            bean.setContent(word.getInfo());
-            resultData.add(bean);
-            MyLog.info(resultData.get(0).toString());
+//            Word word = JsonUtils.getWordInfo(result);
 
-            if (resultAdapter == null) {
-                resultAdapter = new SearchAdapter(SearchActivity.this, resultData, R.layout.item_bean_list);
-            } else {
-                resultAdapter.notifyDataSetChanged();
+            try {
+                word = Utils.getWordFromXML(result);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
             }
+            Bean bean = new Bean(R.drawable.ic_launcher, "", "", "");
+            bean.setTitle(word.word);
+            StringBuffer str = new StringBuffer();
+            str.append(word.pos1+" ");
+            str.append(word.acceptation1);
+            if (null != word.acceptation2) {
+                str.append("\n");
+                str.append(word.pos2+" ");
+                str.append(word.acceptation2);
+            }
+            if (null != word.acceptation3 ) {
+                str.append("\n");
+                str.append(word.pos3+" ");
+                str.append(word.acceptation3);
+            }
+            if (null != word.acceptation4) {
+                str.append("\n");
+                str.append(word.pos4+" ");
+                str.append(word.acceptation4);
+            }
+            bean.setContent(str.toString());
+            resultData.add(bean);
+            resultAdapter.notifyDataSetChanged();
         }
     }
 

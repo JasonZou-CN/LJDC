@@ -5,6 +5,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA
  * User:邹旭
@@ -13,7 +15,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * Desc:略
  */
 @DatabaseTable(tableName = "word_lib")
-public class WordLibServer {
+public class WordLibServer implements Serializable{
     @DatabaseField(columnName = "wordId",generatedId = true)
     public int wordId;
     
