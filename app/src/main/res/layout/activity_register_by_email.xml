@@ -30,6 +30,7 @@
                 android:layout_height="@dimen/ico_input"
                 android:background="@android:color/transparent"
                 android:hint="用户名"
+                android:text="V587jasonzou"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"/>
 
@@ -65,8 +66,8 @@
                 android:layout_height="@dimen/ico_input"
                 android:background="@android:color/transparent"
                 android:hint="邮箱"
+                android:text="frank_zouxu@16.com"
                 android:layout_weight="1"
-                android:inputType="textPassword"
                 android:layout_marginLeft="10dp"/>
 
     </LinearLayout>
@@ -99,6 +100,7 @@
                 android:layout_height="@dimen/ico_input"
                 android:background="@android:color/transparent"
                 android:hint="密码"
+                android:text="199327"
                 android:layout_weight="1"
                 android:inputType="textPassword"
                 android:layout_marginLeft="10dp"/>
@@ -134,6 +136,7 @@
                 android:background="@android:color/transparent"
                 android:hint="确认密码"
                 android:layout_weight="1"
+                android:text="199327"
                 android:inputType="textPassword"
                 android:layout_marginLeft="10dp"/>
 

@@ -1,0 +1,42 @@
+[
+  {
+    "user_id": 1,
+    "email": "frank_zouxu@163.com",
+    "head_image_url": null,
+    "nickname": "jasonzou",
+    "password": "123",
+    "phone": "18380430507"
+  },
+  {
+    "user_id": 2,
+    "email": "sfdsff@123.com",
+    "head_image_url": null,
+    "nickname": "safdf",
+    "password": "124",
+    "phone": "798478"
+  },
+  {
+    "user_id": 3,
+    "email": "1245@134.com",
+    "head_image_url": null,
+    "nickname": "萨达",
+    "password": "7949",
+    "phone": "1234523"
+  },
+  {
+    "user_id": 4,
+    "email": "fwr@gmail.com",
+    "head_image_url": null,
+    "nickname": "sfaf",
+    "password": "124345",
+    "phone": "235654"
+  },
+  {
+    "user_id": 6,
+    "email": "sdfsf@14.com",
+    "head_image_url": null,
+    "nickname": "sfs",
+    "password": "1243",
+    "phone": "sdadad"
+  }
+]

@@ -14,22 +14,22 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "word_lib")
 public class WordLibServer {
-    @DatabaseField(columnName = "word_id",generatedId = true)
+    @DatabaseField(columnName = "wordId",generatedId = true)
     public int wordId;
     
     @DatabaseField(columnName = "word")
     public String word;
     
-    @DatabaseField(columnName = "pron_str_en")
+    @DatabaseField(columnName = "pronStrEn")
     public String pronStrEn;
     
-    @DatabaseField(columnName = "pron_url_en")
+    @DatabaseField(columnName = "pronUrlEn")
     public String pronUrlEn;
     
-    @DatabaseField(columnName = "pron_str_us")
+    @DatabaseField(columnName = "pronStrUs")
     public String pronStrUs;
 
-    @DatabaseField(columnName = "pron_url_us")
+    @DatabaseField(columnName = "pronUrlUs")
     public String pronUrlUs;
 
     @DatabaseField(columnName = "pos1")
@@ -56,28 +56,28 @@ public class WordLibServer {
     @DatabaseField(columnName = "acceptation4")
     public String acceptation4;
 
-    @DatabaseField(columnName = "sent_en1")
+    @DatabaseField(columnName = "sentEn1")
     public String sentEn1;
 
-    @DatabaseField(columnName = "sent_trans1")
+    @DatabaseField(columnName = "sentTrans1")
     public String sentTrans1;
 
-    @DatabaseField(columnName = "sent_en2")
+    @DatabaseField(columnName = "sentEn2")
     public String sentEn2;
 
-    @DatabaseField(columnName = "sent_trans2")
+    @DatabaseField(columnName = "sentTrans2")
     public String sentTrans2;
 
-    @DatabaseField(columnName = "sent_en3")
+    @DatabaseField(columnName = "sentEn3")
     public String sentEn3;
 
-    @DatabaseField(columnName = "sent_trans3")
+    @DatabaseField(columnName = "sentTrans3")
     public String sentTrans3;
 
-    @DatabaseField(columnName = "sent_en4")
+    @DatabaseField(columnName = "sentEn4")
     public String sentEn4;
 
-    @DatabaseField(columnName = "sent_trans4")
+    @DatabaseField(columnName = "sentTrans4")
     public String sentTrans4;
 
     @ForeignCollectionField(eager = true)

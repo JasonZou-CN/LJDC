@@ -17,7 +17,7 @@ import java.util.Collection;
  */
 @DatabaseTable(tableName = "user")
 public class UserServer {
-    @DatabaseField(columnName = "user_id", generatedId = true)
+    @DatabaseField(columnName = "userId", generatedId = true)
     public int userId;
 
     @DatabaseField(columnName = "phone")
@@ -32,14 +32,14 @@ public class UserServer {
     @DatabaseField(columnName = "nickname")
     public String nickname;
 
-    @DatabaseField(columnName = "head_image_url")
+    @DatabaseField(columnName = "headImageUrl")
     public String headImageUrl;
 
     @ForeignCollectionField(eager = false)
-    public ForeignCollection<LearnLib1Server> learnLib1;
+    public Collection<LearnLib1Server> learnLib1;
 
     @ForeignCollectionField(eager = false)
-    public ForeignCollection<LearnLib2Server> learnLib2;
+    public Collection<LearnLib2Server> learnLib2;
 
     @ForeignCollectionField(eager = false)
     public Collection<WordDevelopmentServer> wordDevelopment;

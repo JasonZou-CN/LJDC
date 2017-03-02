@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -113,7 +114,7 @@ public class Utils {
 	 * @param @param mobiles
 	 * @param @return
 	 * @return boolean
-	 * @throws
+	 * @author 邹旭
 	 */
 	public static boolean isMobileNO(String mobiles) {
 		Pattern p = Pattern.compile("^((13[0-9])|(15[0-9])|(18[0-9]))\\d{8}$");
@@ -812,6 +813,27 @@ public class Utils {
 		} catch (Exception e) {
 			return "";
 		}
+	}
+
+	/**@author jasonzou
+	 * @return
+	 * 读取Assets文本文件信息 ; 返回字符串
+	 */
+	public static String getStringFromAssets(String assets,Context context) {
+		StringBuffer sb = new StringBuffer();
+		//获取assets路径
+		AssetManager am = context.getAssets();
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(am.open(assets), "UTF-8"));
+			String next = "";
+			while (null != (next = br.readLine())) {
+				sb.append(next);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			sb.delete(0, sb.length());
+		}
+		return sb.toString().trim();
 	}
 
 }

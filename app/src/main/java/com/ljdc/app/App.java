@@ -2,6 +2,7 @@ package com.ljdc.app;
 
 import android.app.Application;
 import android.content.Context;
+import cn.smssdk.SMSSDK;
 
 /**
  * Created with IntelliJ IDEA

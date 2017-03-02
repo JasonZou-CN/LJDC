@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public class RegisterByEmail extends Activity implements View.OnClickListener ,Response.Listener<String>{
+public class RegisterByEmail extends Activity implements View.OnClickListener, Response.Listener<String> {
 
 
     private android.widget.EditText et_account;
@@ -68,25 +68,30 @@ public class RegisterByEmail extends Activity implements View.OnClickListener ,R
 
     @Override
     public void onClick(View view) {
+        String nickname = et_account.getText().toString().trim();
+        String email = et_email.getText().toString().trim();
+        String pwd = et_password.getText().toString().trim();
+        String pwd_verify = et_password_confirm.getText().toString().trim();
         switch (view.getId()) {
             case R.id.btn_registe:
-                if (TextUtils.isEmpty(et_account.getText().toString()) | TextUtils.isEmpty(et_email.getText().toString()) | TextUtils.isEmpty(et_password.getText().toString()) | TextUtils.isEmpty(et_password_confirm.getText().toString()))
+                if (TextUtils.isEmpty(nickname) | TextUtils.isEmpty(email) | TextUtils.isEmpty(pwd) | TextUtils.isEmpty(pwd_verify))
                     break;
-                else if (et_password.getText().toString().contentEquals(et_password_confirm.getText().toString())) {
+                else if (!pwd.contentEquals(pwd_verify)) {
                     Toast.makeText(this, "密码不一致", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 Map<String, String> parms = new HashMap<String, String>();
-                parms.put("nickname", et_account.getText().toString());
-                parms.put("email", et_email.getText().toString());
-                parms.put("password", et_password_confirm.getText().toString());
+                parms.put("nickname", nickname);
+                parms.put("email", email);
+                parms.put("password", pwd);
 
                 //TODO 发起网络请求
-                new VolleyPostRequest(this).postRequest(parms, Config.REGISTER_URL,this);
+                new VolleyPostRequest(this).postRequest(parms, Config.REGISTER_URL, this);
 
                 break;
             case R.id.ll_createByPhone:
                 Act.toAct(this, RegisterByPhone.class);
+                this.finish();
                 break;
             case R.id.title_left_layout:
                 this.finish();
@@ -107,10 +112,11 @@ public class RegisterByEmail extends Activity implements View.OnClickListener ,R
             //TODO 解析返回值
             Message message = new Gson().fromJson(response, Message.class);
             if (message.getCode() == 200) {
-                Toast.makeText(this, "注册成功，正在进入", Toast.LENGTH_SHORT).show();
-                Act.toAct(this, MainActivity.class);
+                Toast.makeText(this, message.getMsg(), Toast.LENGTH_SHORT).show();
+                Act.toAct(this, LoginActivity.class);
+                this.finish();
             } else {
-                Toast.makeText(this, "注册失败，服务器正在抢修", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, message.getMsg(), Toast.LENGTH_SHORT).show();
             }
 
         } catch (UnsupportedEncodingException e) {

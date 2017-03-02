@@ -32,6 +32,10 @@ public class VolleyPostRequest {
         mQueue.add(request);
     }
 
+
+    /**
+     * 字符串HTTP请求，内部类
+     */
     public class PostStringRequest extends StringRequest {
         Map<String, String> parms;
         private String response;

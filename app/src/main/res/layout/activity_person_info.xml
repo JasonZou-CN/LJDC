@@ -227,7 +227,7 @@
             android:background="@android:color/holo_red_light"
             android:text="注销"
             android:layout_gravity="center_horizontal"
-            />
+            android:id="@+id/logout"/>
 
 
 </LinearLayout>

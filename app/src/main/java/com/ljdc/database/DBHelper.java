@@ -76,12 +76,10 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, LearnLib1Server.class);
             TableUtils.createTable(connectionSource, LearnLib2Server.class);
 
-            //TODO 使用INSERT 初始化数据表数据，通过文本文件导入SQL
-
-//            sqliteDatabase.execSQL("INSERT INTO user_server (nickname,user_id) VALUES (\"jasonzou\",1000);");
-//            sqliteDatabase.execSQL("INSERT INTO user_server (nickname,user_id) VALUES (\"frank\",2000);");
-//            sqliteDatabase.execSQL("INSERT INTO user_server (nickname) VALUES (\"jasonzou\");");
-//            sqliteDatabase.execSQL("INSERT INTO user_server (nickname) VALUES (\"frank\");");
+            //TODO 这里拿到的SQLiteDatabase  execSQL()只能执行一条SQL语句
+            /*sqliteDatabase.execSQL("INSERT INTO `user` (`user_id`, `email`, `head_image_url`, `nickname`, `password`, `phone`) VALUES (1, 'frank_zouxu@163.com', '', 'jasonzou', '123', '18380430507');\n");
+            sqliteDatabase.execSQL("INSERT INTO `user` (`user_id`, `email`, `head_image_url`, `nickname`, `password`, `phone`) VALUES (2, 'sfdsff@123.com', '', 'safdf', '124', '798478');\n");
+            sqliteDatabase.execSQL("INSERT INTO `user` (`user_id`, `email`, `head_image_url`, `nickname`, `password`, `phone`) VALUES (3, '1245@134.com', NULL, '萨达', '7949', '1234523');\n");*/
 
         } catch (Exception e) {
             e.printStackTrace();

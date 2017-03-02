@@ -29,7 +29,7 @@
                 android:layout_height="@dimen/ico_input"
                 android:id="@+id/et_account"
                 android:background="@android:color/transparent"
-                android:hint="用户名/邮箱/手机号"
+                android:hint="邮箱/手机号"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:text="123"/>

@@ -14,13 +14,13 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "lib1")
 public class Lib1EnglishGrand4CoreServer {
-    @DatabaseField(columnName = "lib1_id",generatedId = true)
+    @DatabaseField(columnName = "lib1Id",generatedId = true)
     public int lib1Id;
 
     @ForeignCollectionField(eager = true)
     public ForeignCollection<LearnLib1Server> learnLib1Server;
     
-    @DatabaseField(foreign = true,columnName = "word_id")
+    @DatabaseField(foreign = true,columnName = "wordId")
     public WordLibServer wordLibServer;
 
 }

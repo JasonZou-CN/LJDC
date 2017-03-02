@@ -1,10 +1,9 @@
 package com.ljdc.activitys;
 
 import android.app.Activity;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.android.volley.Response;
@@ -13,14 +12,13 @@ import com.ljdc.R;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
 import com.ljdc.model.Message;
-import com.ljdc.pojo.Lib1EnglishGrand4CoreServer;
 import com.ljdc.pojo.UserServer;
-import com.ljdc.pojo.WordLibServer;
 import com.ljdc.utils.Act;
 import com.ljdc.utils.ToastUtils;
 import com.ljdc.utils.VolleyPostRequest;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,11 +30,18 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
     private EditText et_account, et_password;
     private Button btn_login;
     private LinearLayout ll_createAccount;
+    private SharedPreferences sp;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp = getSharedPreferences(Config.SP_LOGIN_DATA, Activity.MODE_PRIVATE);
+        if (sp.getBoolean(Config.SP_IS_LOGIN, false)) {
+            System.out.println("忽略。。。");
+            Act.toAct(this, MainActivity.class);
+            this.finish();
+        }
         setContentView(R.layout.activity_login);
         initView();
     }
@@ -66,62 +71,37 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
         switch (view.getId()) {
             case R.id.ll_createAccount:
                 Act.toAct(this, RegisterByPhone.class);
+                this.finish();
                 break;
             case R.id.tv_forgetPwd:
                 ToastUtils.showShort(this, "xxx");
 
                 break;
             case R.id.btn_login:
-                try {
-//                    DBHelper.getHelper(this).getDatabase().execSQL("INSERT INTO word_lib_server (word) VALUES (1000,\"446\");");
-//                    Dao<UserServer,Integer> dao = DBHelper.getHelper(this).getDao(UserServer.class);
-//                    UserServer userServer = (UserServer) dao.queryForId(1000);
-//                    Log.d("LoginActivity", userServer.nickname);
-//                    Toast.makeText(this, "userServer.wordDevelopmentServers :"+userServer.wordDevelopmentServers.size(), Toast.LENGTH_SHORT).show();
+//                if (true) {
+//                    Act.toAct(this, MainActivity.class);
+//                    break;
+//                }
 
-                    WordLibServer word = new WordLibServer();
-                    word.word = "word:";
-                    Lib1EnglishGrand4CoreServer lib1 = new Lib1EnglishGrand4CoreServer();
-                    lib1.wordLibServer = word;
-                    DBHelper.getHelper(this).getDao(WordLibServer.class).create(word);
-                    DBHelper.getHelper(this).getDao(Lib1EnglishGrand4CoreServer.class).create(lib1);
-                  /*  DBHelper.getHelper(this).getDao(Lib1EnglishGrand4CoreServer.class).create(lib1);*/
-
-//                    DBHelper.getHelper(this).getDao(UserServer.class);
-                    SQLiteDatabase db = DBHelper.getHelper(this).getReadableDatabase();
-
-                    db.execSQL("INSERT INTO user (nickname) VALUES (\"jasonzou\");");
-                    db.execSQL("INSERT INTO user (nickname) VALUES (\"安抚\");");
-                    db.execSQL("INSERT INTO user (nickname) VALUES (\"阿斯蒂芬\");");
-                    Log.d("LoginActivity", "DBHelper.getHelper(this).getDao(UserServer.class).queryForAll().size():" + DBHelper.getHelper(this).getDao(UserServer.class).queryForAll().size());
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                /*
                 String account = et_account.getText().toString();
                 String password = et_password.getText().toString();
                 if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
                     ToastUtils.showShort(this, "信息不能为空");
                 } else {
                     //TODO 发起网络请求
-                    Map<String, String> parms = new HashMap<String, String>();
+                    Map<String, String> parms = new HashMap<String, String>();//设置POST请求参数
                     parms.put("phone", et_account.getText().toString());
                     parms.put("email", et_account.getText().toString());
-                    parms.put("nickname", et_account.getText().toString());
                     parms.put("password", et_password.getText().toString());
                     new VolleyPostRequest(this).postRequest(parms, Config.LOGIN_URL, this);
                 }
-                */
+
                 break;
         }
     }
 
     /**
-     * 处理网络请求的回调
+     * 处理网络请求的回调 登录成功则 进入应用
      * Called when a response is received.
      *
      * @param response
@@ -129,11 +109,27 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
     @Override
     public void onResponse(String response) {
         try {
-            response = new String(response.getBytes("iso-8859-1"), "utf-8");
+            response = new String(response.getBytes(Config.DEFAULT_STRING_CHARSET), Config.UTF8_CHARSET);
             //TODO 解析返回值
             Message message = new Gson().fromJson(response, Message.class);
             if (message.getCode() == 200) {
-                Toast.makeText(this, "登录成功，正在跳转", Toast.LENGTH_SHORT).show();
+                final SharedPreferences.Editor edit = sp.edit();
+                UserServer user = new Gson().fromJson(message.getMsg(), UserServer.class);
+                DBHelper.getHelper(this).getDao(UserServer.class).create(user);//保存登录的用户信息
+                //TODO 登录成功后，数据库初始化
+                if (!sp.getBoolean(Config.SP_IS_DATABASE_INITED,false)) {//数据库初始化
+                    Toast.makeText(this, "登录成功，正在初始化数据库", Toast.LENGTH_SHORT).show();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            edit.putBoolean(Config.SP_IS_DATABASE_INITED, true);
+                            edit.commit();
+
+                        }
+                    }).start();
+                }
+                edit.putBoolean(Config.SP_IS_LOGIN, true);
+                edit.commit();
                 Act.toAct(this, MainActivity.class);
                 finish();
             } else {
@@ -141,6 +137,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
             }
 
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

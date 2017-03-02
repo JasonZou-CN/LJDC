@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA
@@ -15,25 +16,25 @@ import java.sql.Timestamp;
 @DatabaseTable(tableName = "learn_lib2")
 public class LearnLib2Server {
 
-@DatabaseField(generatedId = true,columnName = "learn_lib2_id")
+@DatabaseField(generatedId = true,columnName = "learnLib2Id")
     private int learnLib2Id;
 
 
-    @DatabaseField(columnName = "grasp_level")
+    @DatabaseField(columnName = "graspLevel")
     private int graspLevel;
 
-    @DatabaseField(columnName = "updata_time")
-    private Timestamp updataTime;
+    @DatabaseField(columnName = "updataTime")
+    private Date updataTime;
 
-    @DatabaseField(columnName = "status_modify")
+    @DatabaseField(columnName = "statusModify")
     public int statusModify;
 
     @DatabaseField(columnName = "anchor")
-    public Timestamp anchor;
+    public Date anchor;
 
-    @DatabaseField(foreign = true,columnName = "lib2_id")
+    @DatabaseField(foreign = true,columnName = "lib2Id")
     private Lib2MiddleSchoolServer lib2MiddleSchool;
 
-    @DatabaseField(foreign = true,columnName = "user_id")
+    @DatabaseField(foreign = true,columnName = "userId")
     private UserServer user;
 }

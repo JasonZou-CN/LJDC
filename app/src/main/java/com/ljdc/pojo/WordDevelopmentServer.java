@@ -3,8 +3,7 @@ package com.ljdc.pojo;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA
@@ -15,25 +14,25 @@ import java.sql.Timestamp;
  */
 @DatabaseTable(tableName = "word_development")
 public class WordDevelopmentServer {
-    @DatabaseField(generatedId = true,columnName = "word_dev_id")
+    @DatabaseField(generatedId = true,columnName = "wordDevId")
     public int wordDevId;
 
-    @DatabaseField(columnName = "words_increase_num")
+    @DatabaseField(columnName = "wordsIncreaseNum")
     public Integer wordsIncreaseNum;
 
-    @DatabaseField(columnName = "word_increase_date")
+    @DatabaseField(columnName = "wordIncreaseDate")
     public Date wordIncreaseDate;
 
-    @DatabaseField(columnName = "grasp_level")
+    @DatabaseField(columnName = "graspLevel")
     public Integer graspLevel;
 
-    @DatabaseField(columnName = "status_modify")
+    @DatabaseField(columnName = "statusModify",defaultValue = "0")
     public int statusModify;
 
-    @DatabaseField(columnName = "anchor")
-    public Timestamp anchor;
+    @DatabaseField(columnName = "anchor",defaultValue = "0000-00-00 17:42:14.000")
+    public Date anchor;
 
-    @DatabaseField(columnName = "user_id",foreign = true,foreignAutoRefresh = true)
+    @DatabaseField(columnName = "userId",foreign = true,foreignAutoRefresh = true)
     public UserServer user;
 
 }
