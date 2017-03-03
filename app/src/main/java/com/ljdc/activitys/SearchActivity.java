@@ -1,19 +1,26 @@
 package com.ljdc.activitys;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.android.volley.Response;
+import com.google.gson.Gson;
+import com.j256.ormlite.dao.Dao;
 import com.ljdc.R;
 import com.ljdc.adapters.SearchAdapter;
 import com.ljdc.app.Config;
+import com.ljdc.database.DBHelper;
 import com.ljdc.model.Bean;
-import com.ljdc.model.Word;
+import com.ljdc.model.Message;
+import com.ljdc.pojo.UserServer;
 import com.ljdc.pojo.WordLibServer;
 import com.ljdc.utils.*;
 import com.ljdc.views.SearchView;
@@ -22,11 +29,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
-public class SearchActivity extends Activity implements SearchView.SearchViewListener {
+public class SearchActivity extends Activity implements SearchView.SearchViewListener, Response.Listener<String> {
 
     /**
      * 默认提示框显示项的个数
@@ -114,8 +124,8 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Toast.makeText(SearchActivity.this, position + "", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("searchWord",word);
-                Act.toAct(SearchActivity.this,StudyWordActivity.class,bundle);
+                bundle.putSerializable("searchWord", word);
+                Act.toAct(SearchActivity.this, StudyWordActivity.class, bundle);
                 SearchActivity.this.finish();
             }
         });
@@ -245,6 +255,25 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
 
     }
 
+    /**Volley 请求成功回调
+     * @param response
+     */
+    @Override
+    public void onResponse(String response) {
+        try {
+            response = new String(response.getBytes(Config.DEFAULT_STRING_CHARSET), Config.UTF8_CHARSET);
+            //TODO 解析返回值
+            Message message = new Gson().fromJson(response, Message.class);
+            if (message.getCode() == 200) {
+
+            } else {
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     private class AsyReq extends AsyncTask<String, Integer, String> {
         private String result;
 
@@ -272,7 +301,7 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
                 e.printStackTrace();
             }
             try {
-                result = new String(result.getBytes(Config.DEFAULT_STRING_CHARSET),Config.UTF8_CHARSET);
+                result = new String(result.getBytes(Config.DEFAULT_STRING_CHARSET), Config.UTF8_CHARSET);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -284,30 +313,41 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
 //            Word word = JsonUtils.getWordInfo(result);
 
             try {
+                Dao dao = DBHelper.getHelper(SearchActivity.this).getDao(WordLibServer.class);
                 word = Utils.getWordFromXML(result);
+                dao.create(word);
+                List<WordLibServer> words = dao.queryBuilder().where().eq("word", word.word).query();
+                WordLibServer w = words.get(0);
+                Log.d("AsyReq : ", w.toString());
+                Map<String, String> parms = new HashMap<String, String>();//设置POST请求参数
+                parms.put(Config.syncJsonData, new Gson().toJson(word));
+                new VolleyPostRequest(SearchActivity.this).postRequest(parms, Config.ADD_WORD_URL, SearchActivity.this);
+
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
             Bean bean = new Bean(R.drawable.ic_launcher, "", "", "");
             bean.setTitle(word.word);
             StringBuffer str = new StringBuffer();
-            str.append(word.pos1+" ");
+            str.append(word.pos1 + " ");
             str.append(word.acceptation1);
             if (null != word.acceptation2) {
                 str.append("\n");
-                str.append(word.pos2+" ");
+                str.append(word.pos2 + " ");
                 str.append(word.acceptation2);
             }
-            if (null != word.acceptation3 ) {
+            if (null != word.acceptation3) {
                 str.append("\n");
-                str.append(word.pos3+" ");
+                str.append(word.pos3 + " ");
                 str.append(word.acceptation3);
             }
             if (null != word.acceptation4) {
                 str.append("\n");
-                str.append(word.pos4+" ");
+                str.append(word.pos4 + " ");
                 str.append(word.acceptation4);
             }
             bean.setContent(str.toString());

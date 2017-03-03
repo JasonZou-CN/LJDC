@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.ljdc.R;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
+import com.ljdc.database.InitDatabase;
 import com.ljdc.model.Message;
 import com.ljdc.pojo.UserServer;
 import com.ljdc.utils.Act;
@@ -125,6 +126,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
                             edit.putBoolean(Config.SP_IS_DATABASE_INITED, true);
                             edit.commit();
 
+                            InitDatabase.initWordLib(LoginActivity.this);
+                            InitDatabase.initLib1(LoginActivity.this);
+                            InitDatabase.initLib2(LoginActivity.this);
+                            InitDatabase.initWordDevelopment(LoginActivity.this);
+                            InitDatabase.initUser(LoginActivity.this);
                         }
                     }).start();
                 }

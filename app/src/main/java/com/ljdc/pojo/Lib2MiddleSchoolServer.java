@@ -14,7 +14,7 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "lib2")
 public class Lib2MiddleSchoolServer {
-    @DatabaseField(columnName = "lib2Id",generatedId = true)
+    @DatabaseField(columnName = "lib2Id",generatedId = true,allowGeneratedIdInsert = true)
     public int lib2Id;
     
     @ForeignCollectionField(eager = false)
@@ -22,4 +22,6 @@ public class Lib2MiddleSchoolServer {
     
     @DatabaseField(foreign = true,columnName = "wordId")
     public WordLibServer wordLib;
+
+    public int wordId;//暂存初始化得到的WordId，和WordLibServer绑定，存入数据库
 }

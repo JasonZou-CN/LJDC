@@ -16,10 +16,40 @@ import java.io.Serializable;
  */
 @DatabaseTable(tableName = "word_lib")
 public class WordLibServer implements Serializable{
-    @DatabaseField(columnName = "wordId",generatedId = true)
+    @DatabaseField(columnName = "wordId",generatedId = true,allowGeneratedIdInsert = true)
     public int wordId;
-    
-    @DatabaseField(columnName = "word")
+
+    @Override
+    public String toString() {
+        return "WordLibServer{" +
+                "wordId=" + wordId +
+                ", word='" + word + '\'' +
+                ", pronStrEn='" + pronStrEn + '\'' +
+                ", pronUrlEn='" + pronUrlEn + '\'' +
+                ", pronStrUs='" + pronStrUs + '\'' +
+                ", pronUrlUs='" + pronUrlUs + '\'' +
+                ", pos1='" + pos1 + '\'' +
+                ", acceptation1='" + acceptation1 + '\'' +
+                ", pos2='" + pos2 + '\'' +
+                ", acceptation2='" + acceptation2 + '\'' +
+                ", pos3='" + pos3 + '\'' +
+                ", acceptation3='" + acceptation3 + '\'' +
+                ", pos4='" + pos4 + '\'' +
+                ", acceptation4='" + acceptation4 + '\'' +
+                ", sentEn1='" + sentEn1 + '\'' +
+                ", sentTrans1='" + sentTrans1 + '\'' +
+                ", sentEn2='" + sentEn2 + '\'' +
+                ", sentTrans2='" + sentTrans2 + '\'' +
+                ", sentEn3='" + sentEn3 + '\'' +
+                ", sentTrans3='" + sentTrans3 + '\'' +
+                ", sentEn4='" + sentEn4 + '\'' +
+                ", sentTrans4='" + sentTrans4 + '\'' +
+                ", lib1=" + lib1 +
+                ", lib2=" + lib2 +
+                '}';
+    }
+
+    @DatabaseField(columnName = "word",unique = true)
     public String word;
     
     @DatabaseField(columnName = "pronStrEn")

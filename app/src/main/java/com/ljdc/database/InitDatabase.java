@@ -7,8 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.j256.ormlite.dao.Dao;
 import com.ljdc.app.Config;
-import com.ljdc.pojo.UserServer;
-import com.ljdc.pojo.WordDevelopmentServer;
+import com.ljdc.pojo.*;
 import com.ljdc.utils.Utils;
 
 import java.sql.SQLException;
@@ -23,6 +22,7 @@ import java.util.List;
  */
 public class InitDatabase {
     private static Gson gson;
+
     static {
         gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -53,6 +53,75 @@ public class InitDatabase {
         try {
             dao = DBHelper.getHelper(ctx).getDao(WordDevelopmentServer.class);
             for (WordDevelopmentServer data : datas) {
+                dao.create(data);
+            }
+            Log.d("init database :", "queryForAll().size():" + dao.queryForAll().size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 词库初始化
+     *
+     * @param ctx
+     */
+    public static void initWordLib(Context ctx) {
+        List<WordLibServer> datas;
+        Dao dao;
+        datas = gson.fromJson(Utils.getStringFromAssets(Config.WORD_LIB, ctx), new TypeToken<List<WordLibServer>>() {
+        }.getType());
+        try {
+            dao = DBHelper.getHelper(ctx).getDao(WordLibServer.class);
+            for (WordLibServer data : datas) {
+                dao.create(data);
+            }
+            Log.d("init database :", "queryForAll().size():" + dao.queryForAll().size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 词库1初始化
+     *
+     * @param ctx
+     */
+    public static void initLib1(Context ctx) {
+        List<Lib1EnglishGrand4CoreServer> datas;
+        WordLibServer word = new WordLibServer();
+        Dao dao;
+        datas = gson.fromJson(Utils.getStringFromAssets(Config.WORD_LIB1, ctx), new TypeToken<List<Lib1EnglishGrand4CoreServer>>() {
+        }.getType());
+        try {
+            dao = DBHelper.getHelper(ctx).getDao(Lib1EnglishGrand4CoreServer.class);
+            for (Lib1EnglishGrand4CoreServer data : datas) {
+                word.wordId = data.wordId;
+                data.wordLibServer = word;//建立关系
+                dao.create(data);
+            }
+            Log.d("init database :", "queryForAll().size():" + dao.queryForAll().size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 词库2初始化
+     *
+     * @param ctx
+     */
+    public static void initLib2(Context ctx) {
+        List<Lib2MiddleSchoolServer> datas;
+        WordLibServer word = new WordLibServer();
+        Dao dao;
+        datas = gson.fromJson(Utils.getStringFromAssets(Config.WORD_LIB2, ctx), new TypeToken<List<Lib2MiddleSchoolServer>>() {
+        }.getType());
+        try {
+            dao = DBHelper.getHelper(ctx).getDao(Lib2MiddleSchoolServer.class);
+            for (Lib2MiddleSchoolServer data : datas) {
+                word.wordId = data.wordId;
+                data.wordLib = word;//建立关系
                 dao.create(data);
             }
             Log.d("init database :", "queryForAll().size():" + dao.queryForAll().size());

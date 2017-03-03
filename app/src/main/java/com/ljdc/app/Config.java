@@ -9,9 +9,9 @@ package com.ljdc.app;
  */
 public class Config {
     /*注：完整URL为（http://dict-co.iciba.com/api/dictionaryphp?w=love&key=25C40D77809C22A3977F8C4B4CF3056D）
-    参数1:w;（单词）
-    参数2:key;（开发者秘钥）
-    */
+            参数1:w;（单词）
+            参数2:key;（开发者秘钥）
+            */
     public static String SEARCH_WORD_API_URL = "http://dict-co.iciba.com/api/dictionary.php";
     public static String SEARCH_WORD_API_KEY = "25C40D77809C22A3977F8C4B4CF3056D";
 
@@ -21,9 +21,11 @@ public class Config {
 
     //    public static String LOCAL_IP = "192.168.191.1";
     public static String LOCAL_IP = "10.18.80.163";
-    public static String HOST_URL = "http://" + LOCAL_IP + ":8080/";
-    public static String REGISTER_URL = HOST_URL + "register";
-    public static String LOGIN_URL = HOST_URL + "login";
+    public static String HOST_URL = "http://" + LOCAL_IP + ":8080";
+    public static String REGISTER_URL = HOST_URL + "/verify/register";
+    public static String LOGIN_URL = HOST_URL + "/verify/login";
+    public static final String ADD_WORD_URL = HOST_URL+"/sync/addOneWordToLib";
+    public static final String syncJsonData = "syncJsonData";
     public static String DEFAULT_STRING_CHARSET = "ISO-8859-1";
     public static String UTF8_CHARSET = "UTF-8";
 
@@ -42,9 +44,9 @@ public class Config {
     // 数据库同步 初始化
     public static String USER = "user.json";
     public static String WORD_DEVELOPMENT = "word_development.json";
-    public static String WORD_LIB = "word_lib.json";
-    public static String LIB1 = "lib1.json";
-    public static String LIB2 = "lib2.json";
+    public static final String WORD_LIB = "word_lib.json";
+    public static final String WORD_LIB1 ="lib1.json";
+    public static final String WORD_LIB2 ="lib2.json";
     public static String LEARN_LIB1 = "learn_lib1.json";
     public static String LEARN_LIB2 = "learn_lib2.json";
 
