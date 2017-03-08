@@ -34,13 +34,12 @@ import java.security.MessageDigest;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ljdc.pojo.WordLibServer;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -930,5 +929,23 @@ public class Utils {
         }
         return word;
     }
+
+    public static Gson getGSONforDate() {
+       Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss") //java.util.Date的时间格式
+                .create();
+        return gson;
+    }
+
+    public static UUID newUUID(){
+        UUID uuid = UUID.randomUUID();
+        return uuid;
+    }
+
+    public static UUID getUUID(String uid){
+        UUID uuid = UUID.fromString(uid);
+        return uuid;
+    }
+
 
 }

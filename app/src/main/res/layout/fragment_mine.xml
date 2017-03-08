@@ -77,7 +77,8 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="10dp"                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
 
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal">
@@ -108,7 +109,8 @@
 
         <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
 
                 android:layout_marginLeft="10dp"
                 android:layout_height="wrap_content"
@@ -140,7 +142,8 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="10dp"                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
 
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal">
@@ -155,6 +158,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="默认发音"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    />
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/gray_cccccc"
+                android:layout_height="2dp"/>
+
+        <LinearLayout
+                android:id="@+id/sync"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+            <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/biz_icon_svg_course"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="数据同步"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     />

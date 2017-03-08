@@ -24,4 +24,11 @@ public class Lib2MiddleSchoolServer {
     public WordLibServer wordLib;
 
     public int wordId;//暂存初始化得到的WordId，和WordLibServer绑定，存入数据库
+
+    public Lib2MiddleSchoolServer(int lib2Id) {
+        this.lib2Id = lib2Id;
+    }
+
+    public Lib2MiddleSchoolServer() {//ORM框架默认调用次构造方法
+    }
 }

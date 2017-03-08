@@ -80,7 +80,6 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             /*sqliteDatabase.execSQL("INSERT INTO `user` (`user_id`, `email`, `head_image_url`, `nickname`, `password`, `phone`) VALUES (1, 'frank_zouxu@163.com', '', 'jasonzou', '123', '18380430507');\n");
             sqliteDatabase.execSQL("INSERT INTO `user` (`user_id`, `email`, `head_image_url`, `nickname`, `password`, `phone`) VALUES (2, 'sfdsff@123.com', '', 'safdf', '124', '798478');\n");
             sqliteDatabase.execSQL("INSERT INTO `user` (`user_id`, `email`, `head_image_url`, `nickname`, `password`, `phone`) VALUES (3, '1245@134.com', NULL, '萨达', '7949', '1234523');\n");*/
-
         } catch (Exception e) {
             e.printStackTrace();
         }

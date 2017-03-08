@@ -1,10 +1,12 @@
 package com.ljdc.pojo;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA
@@ -16,25 +18,37 @@ import java.util.Date;
 @DatabaseTable(tableName = "learn_lib2")
 public class LearnLib2Server {
 
-@DatabaseField(generatedId = true,columnName = "learnLib2Id")
-    private int learnLib2Id;
+    @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, columnName = "learnLib2Id")
+    public UUID learnLib2Id;
 
 
     @DatabaseField(columnName = "graspLevel")
-    private int graspLevel;
+    public int graspLevel;
 
-    @DatabaseField(columnName = "updataTime")
-    private Date updataTime;
+    @DatabaseField(columnName = "updataTime",dataType = DataType.DATE_STRING,format = "yyyy-MM-dd HH:mm:ss")
+    public Date updataTime;
 
-    @DatabaseField(columnName = "statusModify")
+    @DatabaseField(columnName = "statusModify", defaultValue = "0")
     public int statusModify;
 
-    @DatabaseField(columnName = "anchor")
+    @DatabaseField(columnName = "anchor",dataType = DataType.DATE_STRING,format = "yyyy-MM-dd HH:mm:ss",defaultValue = "1970-01-01 08:00:00")
     public Date anchor;
 
-    @DatabaseField(foreign = true,columnName = "lib2Id")
-    private Lib2MiddleSchoolServer lib2MiddleSchool;
+    @DatabaseField(foreign = true, columnName = "lib2Id")
+    public Lib2MiddleSchoolServer lib2;
 
-    @DatabaseField(foreign = true,columnName = "userId")
-    private UserServer user;
+    @DatabaseField(foreign = true, columnName = "userId")
+    public UserServer user;
+
+    //    不进行持久化的属性
+    public int userId;
+    public int lib2Id;
+    public String oldId;//需要删除的不同步的记录ID
+
+    public LearnLib2Server(UUID learnLib2Id) {
+        this.learnLib2Id = learnLib2Id;
+    }
+
+    public LearnLib2Server() {
+    }
 }

@@ -8,10 +8,12 @@ package com.ljdc.app;
  * Desc:略
  */
 public class Config {
+
+
     /*注：完整URL为（http://dict-co.iciba.com/api/dictionaryphp?w=love&key=25C40D77809C22A3977F8C4B4CF3056D）
-            参数1:w;（单词）
-            参数2:key;（开发者秘钥）
-            */
+                    参数1:w;（单词）
+                    参数2:key;（开发者秘钥）
+                    */
     public static String SEARCH_WORD_API_URL = "http://dict-co.iciba.com/api/dictionary.php";
     public static String SEARCH_WORD_API_KEY = "25C40D77809C22A3977F8C4B4CF3056D";
 
@@ -25,10 +27,14 @@ public class Config {
     public static String REGISTER_URL = HOST_URL + "/verify/register";
     public static String LOGIN_URL = HOST_URL + "/verify/login";
     public static final String ADD_WORD_URL = HOST_URL+"/sync/addOneWordToLib";
-    public static final String syncJsonData = "syncJsonData";
+    public static final String SYNC_LEARN_LIB1_URL = HOST_URL+"/sync/syncLearnLib1";
+    public static final String SYNC_LEARN_LIB2_URL = HOST_URL+"/sync/syncLearnLib2";
+    public static final String SYNC_WORD_DEVELOP_URL = HOST_URL+"/sync/syncWordDevelop";
+    public static final String PARAM_SYNCJSONDATA = "syncJsonData";
+    public static final String PARAM_MAXANCHOR = "maxAnchor";//客户端最最近更新时间
+
     public static String DEFAULT_STRING_CHARSET = "ISO-8859-1";
     public static String UTF8_CHARSET = "UTF-8";
-
 
     public static boolean DEBUG = true;//开发阶段
 

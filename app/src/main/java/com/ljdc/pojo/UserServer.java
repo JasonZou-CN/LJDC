@@ -17,7 +17,8 @@ import java.util.Collection;
  */
 @DatabaseTable(tableName = "user")
 public class UserServer {
-    @DatabaseField(columnName = "userId", generatedId = true)
+    @DatabaseField(columnName = "userId", generatedId = true, allowGeneratedIdInsert = true)
+    //if the field ID is null or 0 then the id will be generated,不能传0值
     public int userId;
 
     @DatabaseField(columnName = "phone")
@@ -44,4 +45,22 @@ public class UserServer {
     @ForeignCollectionField(eager = false)
     public Collection<WordDevelopmentServer> wordDevelopment;
 
+    public UserServer() {
+    }
+
+    public UserServer(int userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "UserServer{" +
+                "userId=" + userId +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", headImageUrl='" + headImageUrl + '\'' +
+                '}';
+    }
 }

@@ -16,6 +16,7 @@ import com.ljdc.model.Message;
 import com.ljdc.pojo.UserServer;
 import com.ljdc.utils.Act;
 import com.ljdc.utils.ToastUtils;
+import com.ljdc.utils.Utils;
 import com.ljdc.utils.VolleyPostRequest;
 
 import java.io.UnsupportedEncodingException;
@@ -115,10 +116,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
             Message message = new Gson().fromJson(response, Message.class);
             if (message.getCode() == 200) {
                 final SharedPreferences.Editor edit = sp.edit();
-                UserServer user = new Gson().fromJson(message.getMsg(), UserServer.class);
+                UserServer user = Utils.getGSONforDate().fromJson(message.getMsg(), UserServer.class);
+                System.out.println("user_server :"+user.toString());
+
                 DBHelper.getHelper(this).getDao(UserServer.class).create(user);//保存登录的用户信息
                 //TODO 登录成功后，数据库初始化
-                if (!sp.getBoolean(Config.SP_IS_DATABASE_INITED,false)) {//数据库初始化
+                if (!sp.getBoolean(Config.SP_IS_DATABASE_INITED, false)) {//数据库初始化
                     Toast.makeText(this, "登录成功，正在初始化数据库", Toast.LENGTH_SHORT).show();
                     new Thread(new Runnable() {
                         @Override
@@ -129,8 +132,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
                             InitDatabase.initWordLib(LoginActivity.this);
                             InitDatabase.initLib1(LoginActivity.this);
                             InitDatabase.initLib2(LoginActivity.this);
-                            InitDatabase.initWordDevelopment(LoginActivity.this);
-                            InitDatabase.initUser(LoginActivity.this);
+//                            InitDatabase.initWordDevelopment(LoginActivity.this);
+//                            InitDatabase.initUser(LoginActivity.this);
                         }
                     }).start();
                 }

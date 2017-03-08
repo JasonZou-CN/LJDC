@@ -6,11 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.ljdc.R;
 import com.ljdc.activitys.AboutAppActivity;
 import com.ljdc.activitys.FeedbackActivity;
+import com.ljdc.activitys.MainActivity;
 import com.ljdc.activitys.PersonInfoActivity;
 import com.ljdc.utils.Act;
+import com.ljdc.utils.DataSyncUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -41,6 +44,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
         contView.findViewById(R.id.aboutApp).setOnClickListener(this);
         contView.findViewById(R.id.feedback).setOnClickListener(this);
+        contView.findViewById(R.id.sync).setOnClickListener(this);
     }
 
     /**
@@ -60,6 +64,11 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.aboutApp:
                 Act.toAct(getContext(), AboutAppActivity.class);
+
+                break;
+            case R.id.sync://数据同步
+                Toast.makeText(getActivity(), "正在同步数据", Toast.LENGTH_SHORT).show();
+                new DataSyncUtil().syncUserData(getContext());
 
                 break;
         }

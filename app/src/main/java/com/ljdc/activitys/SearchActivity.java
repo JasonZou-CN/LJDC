@@ -1,7 +1,6 @@
 package com.ljdc.activitys;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +19,6 @@ import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
 import com.ljdc.model.Bean;
 import com.ljdc.model.Message;
-import com.ljdc.pojo.UserServer;
 import com.ljdc.pojo.WordLibServer;
 import com.ljdc.utils.*;
 import com.ljdc.views.SearchView;
@@ -320,7 +318,7 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
                 WordLibServer w = words.get(0);
                 Log.d("AsyReq : ", w.toString());
                 Map<String, String> parms = new HashMap<String, String>();//设置POST请求参数
-                parms.put(Config.syncJsonData, new Gson().toJson(word));
+                parms.put(Config.PARAM_SYNCJSONDATA, new Gson().toJson(word));
                 new VolleyPostRequest(SearchActivity.this).postRequest(parms, Config.ADD_WORD_URL, SearchActivity.this);
 
             } catch (IOException e) {

@@ -34,6 +34,9 @@ public class InitDatabase {
         Dao dao;
         users = gson.fromJson(Utils.getStringFromAssets(Config.USER, ctx), new TypeToken<List<UserServer>>() {
         }.getType());
+        if (users == null || users.size() == 0) {
+            return;
+        }
         try {
             dao = DBHelper.getHelper(ctx).getDao(UserServer.class);
             for (UserServer user : users) {
@@ -53,6 +56,8 @@ public class InitDatabase {
         try {
             dao = DBHelper.getHelper(ctx).getDao(WordDevelopmentServer.class);
             for (WordDevelopmentServer data : datas) {
+                System.out.println("wordDev : " + data.toString());
+                UserServer user = new UserServer(data.userId);
                 dao.create(data);
             }
             Log.d("init database :", "queryForAll().size():" + dao.queryForAll().size());

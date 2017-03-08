@@ -25,4 +25,10 @@ public class Lib1EnglishGrand4CoreServer {
 
     public int wordId;//暂存初始化得到的WordId，和WordLibServer绑定，存入数据库
 
+    public Lib1EnglishGrand4CoreServer(int lib1Id) {
+        this.lib1Id = lib1Id;
+    }
+
+    public Lib1EnglishGrand4CoreServer() {
+    }
 }

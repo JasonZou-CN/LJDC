@@ -1,10 +1,11 @@
 [
   {
-    "wordDevId": 1,
+    "wordDevId": "C2FEEEAC-CFCD-11D1-8B05-00600806D9B6",
     "graspLevel": 3,
     "wordIncreaseDate": "2017-02-25",
     "wordsIncreaseNum": 12,
-    "statusModify": 2,
-    "anchor": "2017-02-25 17:42:14"
+    "statusModify": 0,
+    "anchor": "1970-01-01 08:00:00",
+    "userId": 0
   }
 ]
