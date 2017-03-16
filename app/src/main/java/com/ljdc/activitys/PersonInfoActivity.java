@@ -36,10 +36,11 @@ public class PersonInfoActivity extends Activity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.logout:
                 // 设置数据库为未初始化状态，再次登录需要重新初始化
-                sp = getSharedPreferences(Config.SP_LOGIN_DATA, Context.MODE_PRIVATE);
+                sp = getSharedPreferences(Config.SP_LJDC, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putBoolean(Config.SP_IS_LOGIN,false);
                 editor.putBoolean(Config.SP_IS_DATABASE_INITED,false);
+                editor.putString(Config.PARAM_USERID,"");
                 editor.commit();
                 Act.toAct(this,LoginActivity.class);
                 this.finish();

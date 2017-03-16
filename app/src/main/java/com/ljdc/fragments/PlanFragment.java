@@ -17,18 +17,27 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.PercentFormatter;
+import com.j256.ormlite.dao.Dao;
 import com.ljdc.R;
 import com.ljdc.activitys.MainActivity;
 import com.ljdc.activitys.WordExamActivity;
+import com.ljdc.database.DBHelper;
+import com.ljdc.pojo.*;
 import com.ljdc.utils.Act;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
+//首页-进度
 public class PlanFragment extends Fragment implements OnClickListener {
 
     // 标题栏
     TextView title;
+    DBHelper dbHelper = null;
+    private Dao dao = null;
     private View content = null;
+    private TextView newWord, recoWord, knownWord, graspWord;
     private PieChart mChart;
     private Typeface tf;
 
@@ -52,12 +61,46 @@ public class PlanFragment extends Fragment implements OnClickListener {
         title = ((MainActivity) getActivity()).title;
         title.setText("进度");
 
+        newWord = (TextView) content.findViewById(R.id.newWord);
+        recoWord = (TextView) content.findViewById(R.id.recoWord);
+        knownWord = (TextView) content.findViewById(R.id.knownWord);
+        graspWord = (TextView) content.findViewById(R.id.graspWord);
+
 //        content.findViewById(R.id.wrodFirstExam).setOnClickListener(this);
 
         mChart = (PieChart) content.findViewById(R.id.pieChart);
-        int[] data = new int[]{123, 134, 543, 123};
+        int[] data = new int[]{0, 0, 0, 0};
+        try {
+            String table = null;
+            dbHelper = DBHelper.getHelper(getActivity());
+            List<StudyPlan> studyPlen = dbHelper.getDao(StudyPlan.class).queryForAll();
+            if (studyPlen != null && studyPlen.size() != 0) {
+                StudyPlan studyPlan = studyPlen.get(0);
+                table = studyPlan.currentLib;
+                if (table != null && table.equals("lib1")) {
+                    dao = dbHelper.getDao(LearnLib1Server.class);
+                } else if (table != null && table.equals("lib2")) {
+                    dao = dbHelper.getDao(LearnLib2Server.class);
+                }
+                if (dao != null) {
+                    //TODO 已经学过的单词的词汇构成
+                    data[0] = dao.queryBuilder().where().eq("graspLevel", "0").query().size() + studyPlan.leftNum;//生词
+                    data[1] = dao.queryBuilder().where().eq("graspLevel", "1").query().size();//认识
+                    data[2] = dao.queryBuilder().where().eq("graspLevel", "2").query().size();//熟悉
+                    data[3] = dao.queryBuilder().where().eq("graspLevel", "3").query().size();//掌握
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         PieData mPieData = getPieData(data);
         initPieChartParam(mChart, mPieData);
+
+        newWord.setText(data[0] + "");
+        recoWord.setText(data[1] + "");
+        knownWord.setText(data[2] + "");
+        graspWord.setText(data[3] + "");
 
 
     }
@@ -99,7 +142,7 @@ public class PlanFragment extends Fragment implements OnClickListener {
     }
 
     /**
-     * @param count 分成几部分
+     *
      */
     private PieData getPieData(int[] data) {
 
@@ -122,9 +165,9 @@ public class PlanFragment extends Fragment implements OnClickListener {
         //TODO 传入参数 ，设置Y轴数据
         int num = data[0] + data[1] + data[2] + data[3];
         float newWord = data[0] * 1f / num;
-        float recoWord = data[1]* 1f / num;
-        float knownWord = data[2]* 1f / num;
-        float controlWord = data[3]* 1f / num;
+        float recoWord = data[1] * 1f / num;
+        float knownWord = data[2] * 1f / num;
+        float controlWord = data[3] * 1f / num;
 
         yValues.add(new Entry(newWord, 0));
         yValues.add(new Entry(recoWord, 1));

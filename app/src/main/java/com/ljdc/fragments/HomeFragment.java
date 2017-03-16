@@ -14,6 +14,11 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import com.ljdc.R;
 import com.ljdc.activitys.MainActivity;
+import com.ljdc.database.DBHelper;
+import com.ljdc.pojo.StudyPlan;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @Describe: TODO 首页
@@ -41,7 +46,18 @@ public class HomeFragment extends Fragment implements OnClickListener {
                              Bundle savedInstanceState) {
         content = inflater.inflate(R.layout.frag_tab_home, null);
         initComponet(inflater);
-        loadFragment(0);
+
+        try {
+            List list = DBHelper.getHelper(getActivity()).getDao(StudyPlan.class).queryForAll();
+            if (list.size() == 0) {
+                loadFragment(2);//先设置词库
+            } else {
+                loadFragment(0);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return content;
 
     }

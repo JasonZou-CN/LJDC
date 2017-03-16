@@ -253,7 +253,9 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
 
     }
 
-    /**Volley 请求成功回调
+    /**
+     * Volley 请求成功回调
+     *
      * @param response
      */
     @Override
@@ -308,24 +310,22 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
 
         @Override
         protected void onPostExecute(String result) {
-//            Word word = JsonUtils.getWordInfo(result);
-
+            //TODO 将查询的单词存到本地和服务器上
             try {
-                Dao dao = DBHelper.getHelper(SearchActivity.this).getDao(WordLibServer.class);
                 word = Utils.getWordFromXML(result);
+                //存储到本地数据库
+             /* Dao dao = DBHelper.getHelper(SearchActivity.this).getDao(WordLibServer.class);
                 dao.create(word);
                 List<WordLibServer> words = dao.queryBuilder().where().eq("word", word.word).query();
                 WordLibServer w = words.get(0);
-                Log.d("AsyReq : ", w.toString());
-                Map<String, String> parms = new HashMap<String, String>();//设置POST请求参数
-                parms.put(Config.PARAM_SYNCJSONDATA, new Gson().toJson(word));
-                new VolleyPostRequest(SearchActivity.this).postRequest(parms, Config.ADD_WORD_URL, SearchActivity.this);
+                Log.d("AsyReq : ", w.toString());*/
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
+                //存储到服务器
+               /* Map<String, String> parms = new HashMap<String, String>();//设置POST请求参数
+                parms.put(Config.PARAM_SYNCJSONDATA, new Gson().toJson(word));
+                new VolleyPostRequest(SearchActivity.this).postRequest(parms, Config.ADD_WORD_URL, SearchActivity.this);*/
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             Bean bean = new Bean(R.drawable.ic_launcher, "", "", "");

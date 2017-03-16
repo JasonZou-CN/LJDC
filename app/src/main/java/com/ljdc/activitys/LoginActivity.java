@@ -14,10 +14,7 @@ import com.ljdc.database.DBHelper;
 import com.ljdc.database.InitDatabase;
 import com.ljdc.model.Message;
 import com.ljdc.pojo.UserServer;
-import com.ljdc.utils.Act;
-import com.ljdc.utils.ToastUtils;
-import com.ljdc.utils.Utils;
-import com.ljdc.utils.VolleyPostRequest;
+import com.ljdc.utils.*;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -38,7 +35,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sp = getSharedPreferences(Config.SP_LOGIN_DATA, Activity.MODE_PRIVATE);
+        sp = getSharedPreferences(Config.SP_LJDC, Activity.MODE_PRIVATE);
         if (sp.getBoolean(Config.SP_IS_LOGIN, false)) {
             System.out.println("忽略。。。");
             Act.toAct(this, MainActivity.class);
@@ -117,7 +114,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
             if (message.getCode() == 200) {
                 final SharedPreferences.Editor edit = sp.edit();
                 UserServer user = Utils.getGSONforDate().fromJson(message.getMsg(), UserServer.class);
-                System.out.println("user_server :"+user.toString());
+                System.out.println("user_server :" + user.toString());
 
                 DBHelper.getHelper(this).getDao(UserServer.class).create(user);//保存登录的用户信息
                 //TODO 登录成功后，数据库初始化
@@ -138,7 +135,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
                     }).start();
                 }
                 edit.putBoolean(Config.SP_IS_LOGIN, true);
+                edit.putString(Config.PARAM_USERID, user.userId + "");
                 edit.commit();
+                new DataSyncUtil().syncUserData(LoginActivity.this);
                 Act.toAct(this, MainActivity.class);
                 finish();
             } else {

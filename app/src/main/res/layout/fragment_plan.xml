@@ -78,7 +78,7 @@
             android:layout_marginTop="10dp">
 
         <TextView
-                android:id="@+id/tv_newWord"
+                android:id="@+id/newWord"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="154"
@@ -120,7 +120,8 @@
                 android:text="465"
                 android:layout_marginEnd="53dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:id="@+id/recoWord"/>
 
         <LinearLayout
                 android:orientation="horizontal"
@@ -156,7 +157,8 @@
                 android:text="798"
                 android:layout_marginEnd="54dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:id="@+id/knownWord"/>
 
         <LinearLayout
                 android:orientation="horizontal"
@@ -192,7 +194,8 @@
                 android:text="89"
                 android:layout_marginEnd="54dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:id="@+id/graspWord"/>
 
         <LinearLayout
                 android:orientation="horizontal"

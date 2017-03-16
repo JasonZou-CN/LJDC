@@ -2,9 +2,9 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
               tools:context=".fragments.HomeTabCFragment"
-              android:paddingTop="10dp">
+              android:paddingTop="10dp"
+              android:orientation="vertical">
 
 
     <LinearLayout
@@ -42,7 +42,7 @@
             <ImageView
                     android:layout_width="60dp"
                     android:layout_height="75dp"
-                    android:id="@+id/imageView3"
+                    android:id="@+id/libsIco"
                     android:src="@drawable/book_beishida_8_down"
                     />
 
@@ -57,7 +57,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="英语四级核心词汇"
-                        android:id="@+id/textView3"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:id="@+id/libsName"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"/>
 
@@ -79,7 +81,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="4325"
-                                android:id="@+id/textView5"/>
+                                android:id="@+id/totalNum"/>
 
                         <TextView
                                 android:layout_width="wrap_content"
@@ -106,7 +108,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="10.02%"
-                                android:id="@+id/textView11"/>
+                                android:id="@+id/studyProgress"/>
 
                         <TextView
                                 android:layout_width="wrap_content"
@@ -133,7 +135,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="2017.11.1"
-                                android:id="@+id/textView13"/>
+                                android:id="@+id/finishDate"/>
 
                         <TextView
                                 android:layout_width="wrap_content"

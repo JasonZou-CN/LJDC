@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ljdc.app.Config;
 import com.ljdc.pojo.WordLibServer;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -62,7 +63,7 @@ public class Utils {
      * @Description: TODO
      */
     public static void savePreference(Context context, String key, String value) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit()
+        context.getSharedPreferences(Config.SP_LJDC, Activity.MODE_PRIVATE).edit()
                 .putString(key, value).commit();
     }
 
@@ -73,11 +74,11 @@ public class Utils {
      * @param @param  key 键
      * @param @return
      * @return String 返回的值
-     * @Title: getpreference
+     * @Title: getPreference
      * @Description: TODO
      */
-    public static String getpreference(Context context, String key) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
+    public static String getPreference(Context context, String key) {
+        return context.getSharedPreferences(Config.SP_LJDC, Activity.MODE_PRIVATE)
                 .getString(key, "");
     }
 
@@ -88,11 +89,11 @@ public class Utils {
      * @param @param  key 键
      * @param @return
      * @return String 返回的值
-     * @Title: getpreference
+     * @Title: getPreference
      * @Description: TODO
      */
-    public static boolean deltepreference(Context context, String key) {
-        return PreferenceManager.getDefaultSharedPreferences(context).edit()
+    public static boolean delPreference(Context context, String key) {
+        return context.getSharedPreferences(Config.SP_LJDC, Activity.MODE_PRIVATE).edit()
                 .remove(key).commit();
     }
 
@@ -605,6 +606,8 @@ public class Utils {
     }
 
     /**
+     * 获取两个日期之间间隔多少天
+     *
      * @param @param  date1
      * @param @param  date2
      * @param @return
@@ -618,8 +621,21 @@ public class Utils {
             return (sdf.parse(date2).getTime() - sdf.parse(date1).getTime())
                     / (24 * 60 * 60 * 1000);
         } catch (ParseException e) {
+            e.printStackTrace();
             return 0;
         }
+    }
+
+    /**
+     * 获取两个日期的间隔天数
+     *
+     * @param before
+     * @param after
+     * @return
+     */
+    public static long getTwodateDayByDate(java.util.Date before, java.util.Date after) {
+        return (after.getTime() - before.getTime())
+                / (24 * 60 * 60 * 1000);
     }
 
     /**
@@ -931,18 +947,24 @@ public class Utils {
     }
 
     public static Gson getGSONforDate() {
-       Gson gson = new GsonBuilder()
+        Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss") //java.util.Date的时间格式
                 .create();
         return gson;
     }
 
-    public static UUID newUUID(){
+    public static SimpleDateFormat getDateFormater(){
+        SimpleDateFormat sdf;//小写的mm表示的是分钟
+        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf;
+    }
+
+    public static UUID newUUID() {
         UUID uuid = UUID.randomUUID();
         return uuid;
     }
 
-    public static UUID getUUID(String uid){
+    public static UUID getUUID(String uid) {
         UUID uuid = UUID.fromString(uid);
         return uuid;
     }

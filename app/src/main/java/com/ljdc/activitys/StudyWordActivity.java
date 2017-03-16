@@ -13,13 +13,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.ljdc.R;
+import com.ljdc.database.DBHelper;
 import com.ljdc.model.Word;
-import com.ljdc.pojo.WordLibServer;
+import com.ljdc.pojo.*;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +34,8 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
     private ViewPager vp_container;
     private QuickPageAdapter pageAdapter;
     private WordLibServer word; //暂存当前显示的单词信息
+    private DBHelper dbHelper;
+    int totalNum = 0;
 
 
     @Override
@@ -51,7 +57,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
             title.setText("单词详情");
         } else {
             //单词计划进来的
-            title.setText("学习 ：1/5");
+            title.setText("学习 ：1/"+totalNum);
         }
 
 
@@ -65,7 +71,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
 
             @Override
             public void onPageSelected(int position) {
-                title.setText("学习 ：" + (position + 1) + "/5");//position 从0 开始
+                title.setText("学习 ：" + (position + 1) + "/"+totalNum);//position 从0 开始
 
             }
 
@@ -90,9 +96,44 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
             data.add(new Word());
             data.add(new Word());
             pageAdapter = new QuickPageAdapter(data, getLayoutInflater());*/
+            try {
+                List<WordLibServer> data = null;
+                StudyPlan plan = null;
+                dbHelper = DBHelper.getHelper(this);
+                List list = null;
+                list = dbHelper.getDao(StudyPlan.class).queryForAll();
+                if (list != null && list.size() != 0) {
+                    plan = (StudyPlan) list.get(0);
+                    //数据列表
+                    data = new ArrayList<WordLibServer>();
+                    //TODO 当前正在学习的词库，索取需要需要的单词
+                    if (plan.currentLib.equals("lib1")) {
+                        QueryBuilder query = dbHelper.getDao(LearnLib1Server.class).queryBuilder();
+                        List<LearnLib1Server> listLearnLib = query.where().eq("graspLevel", 0).query();
+                        for (LearnLib1Server d : listLearnLib) {
+                            dbHelper.getDao(Lib1EnglishGrand4CoreServer.class).refresh(d.lib1);
+                            dbHelper.getDao(WordLibServer.class).refresh(d.lib1.wordLibServer);
+                            data.add(d.lib1.wordLibServer);
+                        }
+                    } else if (plan.currentLib.equals("lib2")) {
+                        QueryBuilder query = dbHelper.getDao(LearnLib2Server.class).queryBuilder();
+                        List<LearnLib2Server> listLearnLib = query.where().eq("graspLevel", 0).query();
+                        for (LearnLib2Server d : listLearnLib) {
+                            dbHelper.getDao(Lib2MiddleSchoolServer.class).refresh(d.lib2);
+                            dbHelper.getDao(WordLibServer.class).refresh(d.lib2.wordLib);
+                            data.add(d.lib2.wordLib);
+                        }
+                    }
+                    totalNum = data.size();
+                    pageAdapter = new QuickPageAdapter(data, getLayoutInflater());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } else {
             List<WordLibServer> data = new ArrayList<WordLibServer>();
             data.add(word);
+            totalNum = data.size();
             pageAdapter = new QuickPageAdapter(data, getLayoutInflater());
         }
 
@@ -168,8 +209,10 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                 tv_word = (TextView) view.findViewById(R.id.word_item);
 
                 StringBuffer str = new StringBuffer();
-                str.append(word.pos1 + " ");
-                str.append(word.acceptation1);
+                if (null != word.acceptation1) {
+                    str.append(word.pos1 + " ");
+                    str.append(word.acceptation1);
+                }
                 if (null != word.acceptation2) {
                     str.append("\n");
                     str.append(word.pos2 + " ");

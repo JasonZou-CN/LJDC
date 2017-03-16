@@ -75,6 +75,8 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Lib2MiddleSchoolServer.class);
             TableUtils.createTable(connectionSource, LearnLib1Server.class);
             TableUtils.createTable(connectionSource, LearnLib2Server.class);
+            TableUtils.createTable(connectionSource, StudyPlan.class);
+            TableUtils.createTable(connectionSource, Libs.class);
 
             //TODO 这里拿到的SQLiteDatabase  execSQL()只能执行一条SQL语句
             /*sqliteDatabase.execSQL("INSERT INTO `user` (`user_id`, `email`, `head_image_url`, `nickname`, `password`, `phone`) VALUES (1, 'frank_zouxu@163.com', '', 'jasonzou', '123', '18380430507');\n");
@@ -99,6 +101,8 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, Lib2MiddleSchoolServer.class, true);
             TableUtils.dropTable(connectionSource, LearnLib1Server.class, true);
             TableUtils.dropTable(connectionSource, LearnLib2Server.class, true);
+            TableUtils.dropTable(connectionSource, StudyPlan.class, true);
+            TableUtils.dropTable(connectionSource, Libs.class, true);
             onCreate(sqLiteDatabase, connectionSource);
         } catch (Exception e) {
             e.printStackTrace();

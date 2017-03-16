@@ -16,7 +16,7 @@ public class UnitTestActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                InitDatabase.initWordDevelopment(UnitTestActivity.this);
+//                InitDatabase.initWordDevelopment(UnitTestActivity.this);
             }
         }).start();
     }

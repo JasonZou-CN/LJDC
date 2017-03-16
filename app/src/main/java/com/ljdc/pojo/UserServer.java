@@ -5,6 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 
@@ -16,7 +17,7 @@ import java.util.Collection;
  * Desc:略
  */
 @DatabaseTable(tableName = "user")
-public class UserServer {
+public class UserServer implements Serializable{
     @DatabaseField(columnName = "userId", generatedId = true, allowGeneratedIdInsert = true)
     //if the field ID is null or 0 then the id will be generated,不能传0值
     public int userId;
@@ -44,6 +45,9 @@ public class UserServer {
 
     @ForeignCollectionField(eager = false)
     public Collection<WordDevelopmentServer> wordDevelopment;
+
+    @ForeignCollectionField(eager = false)
+    public Collection<StudyPlan> studyPlen;
 
     public UserServer() {
     }

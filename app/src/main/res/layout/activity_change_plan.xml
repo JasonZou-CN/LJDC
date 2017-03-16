@@ -56,10 +56,13 @@
                     >
 
                 <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/libName"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
                         android:text="英语四级核心词汇"
-                        android:id="@+id/textView3"
+                        android:layout_marginRight="5dp"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"/>
 
@@ -78,15 +81,18 @@
                             >
 
                         <TextView
+                                android:id="@+id/totalNum"
+                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4325"
-                                android:id="@+id/textView5"/>
+                                android:text="4654"
+                                />
 
                         <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="词汇"
+                                android:layout_gravity="center_horizontal"
                                 android:id="@+id/textView9"/>
                     </LinearLayout>
 
@@ -105,10 +111,11 @@
                             android:gravity="center_horizontal">
 
                         <TextView
+                                android:id="@+id/studyProgress"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="10.02%"
-                                android:id="@+id/textView11"/>
+                                />
 
                         <TextView
                                 android:layout_width="wrap_content"
@@ -132,10 +139,11 @@
                             android:gravity="center_horizontal">
 
                         <TextView
+                                android:id="@+id/finishDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="2017.11.1"
-                                android:id="@+id/textView13"/>
+                                />
 
                         <TextView
                                 android:layout_width="wrap_content"
@@ -178,8 +186,8 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="英语四级核心词汇 （剩余3472个单词），计划完成时间 2017-02-12"
-                    android:id="@+id/textView16"/>
+                    android:text=""
+                    android:id="@+id/planDesc"/>
 
             <LinearLayout
                     android:id="@+id/planContainer"
@@ -220,7 +228,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:text="天"
+                                android:text="个"
                                 android:id="@+id/textView19"
                                 android:layout_gravity="center_vertical"
                                 android:textSize="18dp"/>
@@ -258,7 +266,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:text="个"
+                                android:text="天"
                                 android:layout_gravity="center_vertical"
                                 android:textSize="18dp"/>
                     </LinearLayout>
