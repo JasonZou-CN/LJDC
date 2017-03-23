@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import java.util.UUID;
  * Desc:略
  */
 @DatabaseTable(tableName = "learn_lib2")
-public class LearnLib2Server {
+public class LearnLib2Server implements Serializable {
 
     @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, columnName = "learnLib2Id")
     public UUID learnLib2Id;
@@ -25,13 +26,13 @@ public class LearnLib2Server {
     @DatabaseField(columnName = "graspLevel")
     public int graspLevel;
 
-    @DatabaseField(columnName = "updataTime",dataType = DataType.DATE_STRING,format = "yyyy-MM-dd HH:mm:ss")
+    @DatabaseField(columnName = "updataTime", dataType = DataType.DATE_STRING, format = "yyyy-MM-dd HH:mm:ss")
     public Date updataTime;
 
     @DatabaseField(columnName = "statusModify", defaultValue = "0")
     public int statusModify;
 
-    @DatabaseField(columnName = "anchor",dataType = DataType.DATE_STRING,format = "yyyy-MM-dd HH:mm:ss",defaultValue = "1970-01-01 08:00:00")
+    @DatabaseField(columnName = "anchor", dataType = DataType.DATE_STRING, format = "yyyy-MM-dd HH:mm:ss", defaultValue = "1970-01-01 08:00:00")
     public Date anchor;
 
     @DatabaseField(foreign = true, columnName = "lib2Id")

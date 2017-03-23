@@ -23,7 +23,7 @@
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView7"
+            android:id="@+id/play"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/img_sound_selector"
             android:layout_marginTop="10dp"/>
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="trade"
-            android:id="@+id/textView23"
+            android:id="@+id/word"
             android:layout_gravity="center_horizontal"
             android:textSize="40sp"/>
 
@@ -58,7 +58,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/holo_green_light"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:id="@+id/layoutA">
 
                 <TextView
                         android:layout_width="match_parent"
@@ -77,14 +78,16 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:id="@+id/sectionA"/>
             </LinearLayout>
 
             <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_right"
-                    android:layout_weight="7"/>
+                    android:layout_weight="7"
+                    android:id="@+id/iv_A"/>
 
         </LinearLayout> <LinearLayout
             android:orientation="horizontal"
@@ -97,7 +100,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_phone_auth"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:id="@+id/layoutB">
 
                 <TextView
                         android:layout_width="match_parent"
@@ -116,7 +120,8 @@
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
                         android:singleLine="true"
-                        android:ellipsize="end"/>
+                        android:ellipsize="end"
+                        android:id="@+id/sectionB"/>
             </LinearLayout>
 
             <ImageView
@@ -124,7 +129,8 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_wrong"
                     android:visibility="invisible"
-                    android:layout_weight="7"/>
+                    android:layout_weight="7"
+                    android:id="@+id/iv_B"/>
 
         </LinearLayout> <LinearLayout
             android:orientation="horizontal"
@@ -137,7 +143,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_phone_auth"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:id="@+id/layoutC">
 
                 <TextView
                         android:layout_width="match_parent"
@@ -156,13 +163,14 @@
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
                         android:singleLine="true"
-                        android:ellipsize="end"/>
+                        android:ellipsize="end"
+                        android:id="@+id/sectionC"/>
             </LinearLayout>
 
             <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/imageView8"
+                    android:id="@+id/iv_C"
                     android:src="@drawable/ic_right"
                     android:visibility="invisible"
                     android:layout_weight="7"/>
@@ -178,7 +186,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/holo_red_light"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:id="@+id/layoutD">
 
                 <TextView
                         android:layout_width="match_parent"
@@ -198,14 +207,16 @@
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
                         android:singleLine="true"
-                        android:ellipsize="end"/>
+                        android:ellipsize="end"
+                        android:id="@+id/sectionD"/>
             </LinearLayout>
 
             <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_wrong"
-                    android:layout_weight="7"/>
+                    android:layout_weight="7"
+                    android:id="@+id/iv_D"/>
 
         </LinearLayout>
 
@@ -217,5 +228,6 @@
             android:text="不认识"
             android:background="@drawable/bg_btn_selector"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="80dp"/>
+            android:layout_marginTop="80dp"
+            android:id="@+id/pass"/>
 </LinearLayout>

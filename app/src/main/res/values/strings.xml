@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LJDC</string>
+    <string name="app_name">乐记单词</string>
     <string name="login">登录</string>
     <string name="title">标题</string>
     <string name="registe_by_email">邮箱注册</string>

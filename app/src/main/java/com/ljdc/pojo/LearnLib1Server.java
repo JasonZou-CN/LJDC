@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
  * Desc:略
  */
 @DatabaseTable(tableName = "learn_lib1")
-public class LearnLib1Server {
+public class LearnLib1Server implements Serializable {
     @DatabaseField(generatedId = true,allowGeneratedIdInsert = true, columnName = "learnLib1Id")
     public UUID learnLib1Id;
 

@@ -18,15 +18,16 @@
 
 
         <EditText
+                android:id="@+id/feedback"
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:inputType="textMultiLine"
                 android:background="@android:color/transparent"
-      android:gravity="start"
-          android:text="以前习惯了网页以及swing上的文本框输入，现在到Android上突然没有了这种控件，刚开始使用起来还是比较费力的。为了想实现多行文本框的输入及显示效果，逐一解决了如下问题：以前习惯了网页以及swing上的文本框输入，现在到Android上突然没有了这种控件，刚开始使用起来还是比较费力的。为了想实现多行文本框的输入及显示效果，逐一解决了如下问题：以前习惯了网页以及swing上的文本框输入，现在到Android上突然没有了这种控件，刚开始使用起来还是比较费力的。为了想实现多行文本框的输入及显示效果，逐一解决了如下问题："
+                android:gravity="start"
+                android:text="以前习惯了网页以及swing上的文本框输入，现在到Android上突然没有了这种控件，刚开始使用起来还是比较费力的。为了想实现多行文本框的输入及显示效果，逐一解决了如下问题：以前习惯了网页以及swing上的文本框输入，现在到Android上突然没有了这种控件，刚开始使用起来还是比较费力的。为了想实现多行文本框的输入及显示效果，逐一解决了如下问题：以前习惯了网页以及swing上的文本框输入，现在到Android上突然没有了这种控件，刚开始使用起来还是比较费力的。为了想实现多行文本框的输入及显示效果，逐一解决了如下问题："
                 android:layout_marginLeft="@dimen/margin_left_mid"
                 android:hint="请输入遇到的问题："
-                android:id="@+id/editText"/>
+                />
 
         <LinearLayout
                 android:layout_marginTop="5dp"
@@ -39,6 +40,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:id="@+id/img_desc"
+
                     android:layout_marginLeft="@dimen/margin_left_mid"
                     android:src="@drawable/small_class_add_logo"
                     />
@@ -48,6 +50,7 @@
 
     <LinearLayout
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -76,11 +79,11 @@
     </LinearLayout>
 
     <Button
+            android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_btn_selector"
-            android:text="提交"
-            android:id="@+id/button"
+            android:text="邮箱提交"
             android:layout_marginTop="80dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"

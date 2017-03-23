@@ -1,14 +1,19 @@
 package com.ljdc.activitys;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import com.ljdc.R;
 
 public class FeedbackActivity extends Activity implements View.OnClickListener {
     private TextView title;
     private View back;
+    private Button submit;
+    private EditText feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,11 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
         back = findViewById(R.id.title_left_layout);
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
+
+        feedback = (EditText) findViewById(R.id.feedback);
+
+        submit = (Button) findViewById(R.id.submit);
+        submit.setOnClickListener(this);
     }
 
     /**
@@ -38,6 +48,18 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
             case R.id.title_left_layout:
                 finish();
                 break;
+            case R.id.submit:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                // i.setType("text/plain"); //模拟器请使用这行
+                i.setType("message/rfc822"); // 真机上使用这行
+                i.putExtra(Intent.EXTRA_EMAIL,
+                        new String[]{"V587jasonzou@gmail.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "用户反馈");
+                i.putExtra(Intent.EXTRA_TEXT, feedback.getText().toString().trim());
+                startActivity(Intent.createChooser(i,
+                        "选择邮箱软件"));
+                break;
+
         }
     }
 }

@@ -12,9 +12,9 @@ import java.util.Map;
 public class Config {
 
     /*注：完整URL为（http://dict-co.iciba.com/api/dictionaryphp?w=love&key=25C40D77809C22A3977F8C4B4CF3056D）
-                                    参数1:w;（单词）
-                                    参数2:key;（开发者秘钥）
-                                    */
+                                        参数1:w;（单词）
+                                        参数2:key;（开发者秘钥）
+                                        */
     public static String SEARCH_WORD_API_URL = "http://dict-co.iciba.com/api/dictionary.php";
     public static String SEARCH_WORD_API_KEY = "25C40D77809C22A3977F8C4B4CF3056D";
 
@@ -50,6 +50,7 @@ public class Config {
     public static String SP_LJDC = "SP_LJDC";
     public static String SP_IS_DATABASE_INITED = "IS_DATABASE_INITED";
     public static String SP_IS_LOGIN = "IS_LOGIN";
+    public static final String SP_DEFAULT_PRON = "default_pron";
 
     // 数据库同步 初始化
     public static String USER = "user.json";

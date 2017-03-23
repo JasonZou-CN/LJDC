@@ -16,9 +16,11 @@ import android.widget.Toast;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.ljdc.R;
+import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
 import com.ljdc.model.Word;
 import com.ljdc.pojo.*;
+import com.ljdc.utils.Utils;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -30,18 +32,22 @@ import java.util.List;
 @SuppressWarnings("ALL")
 public class StudyWordActivity extends Activity implements View.OnClickListener {
     TextView title;
+    int totalNum = 0;
     private View back;
     private ViewPager vp_container;
     private QuickPageAdapter pageAdapter;
     private WordLibServer word; //暂存当前显示的单词信息
     private DBHelper dbHelper;
-    int totalNum = 0;
+    private int defaultPron; //默认发音标记 0:Uk 1:Us
+    private ArrayList<WordLibServer> data;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study_word);
+        String s = Utils.getPreference(this, Config.SP_DEFAULT_PRON);
+        defaultPron = Integer.parseInt(s.equals("") ? "0" : s);
         initData();
         initView();
     }
@@ -57,7 +63,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
             title.setText("单词详情");
         } else {
             //单词计划进来的
-            title.setText("学习 ：1/"+totalNum);
+            title.setText("学习 ：1/" + totalNum);
         }
 
 
@@ -71,7 +77,8 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
 
             @Override
             public void onPageSelected(int position) {
-                title.setText("学习 ：" + (position + 1) + "/"+totalNum);//position 从0 开始
+                title.setText("学习 ：" + (position + 1) + "/" + totalNum);//position 从0 开始
+                word = data.get(position);
 
             }
 
@@ -97,7 +104,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
             data.add(new Word());
             pageAdapter = new QuickPageAdapter(data, getLayoutInflater());*/
             try {
-                List<WordLibServer> data = null;
+                data = null;
                 StudyPlan plan = null;
                 dbHelper = DBHelper.getHelper(this);
                 List list = null;
@@ -126,6 +133,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                     }
                     totalNum = data.size();
                     pageAdapter = new QuickPageAdapter(data, getLayoutInflater());
+                    word = data.get(0);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -148,11 +156,17 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                 break;
             case R.id.pron:
                 Toast.makeText(this, "发音", Toast.LENGTH_SHORT).show();
-
                 if (word != null) {
                     MediaPlayer mp = new MediaPlayer();//构建MediaPlayer对象
                     try {
-                        mp.setDataSource(word.pronUrlEn);//设置文件路径
+                        switch (defaultPron) {
+                            case 0:
+                                mp.setDataSource(word.pronUrlEn);//设置文件路径
+                                break;
+                            case 1:
+                                mp.setDataSource(word.pronUrlUs);//设置文件路径
+                                break;
+                        }
                         mp.prepare();//准备
                         mp.start();//开始播放
                     } catch (IOException e) {

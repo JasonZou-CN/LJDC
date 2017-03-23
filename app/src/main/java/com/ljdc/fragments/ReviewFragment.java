@@ -18,12 +18,13 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.query.Clause;
 import com.ljdc.R;
 import com.ljdc.activitys.MainActivity;
 import com.ljdc.activitys.WordExamActivity;
 import com.ljdc.app.App;
 import com.ljdc.database.DBHelper;
-import com.ljdc.pojo.WordDevelopmentServer;
+import com.ljdc.pojo.*;
 import com.ljdc.utils.Act;
 
 import java.sql.SQLException;
@@ -50,6 +51,10 @@ public class ReviewFragment extends Fragment implements OnClickListener {
     private Date[] oneWeekDate;
     private List<WordDevelopmentServer> secondLevels;
     private List<WordDevelopmentServer> thirdLevels;
+    private String currentLib = "";
+    private StudyPlan plan;
+    private int twoDaysAgoMills = 2 * 24 * 60 * 60 * 1000;
+    private int threeDaysAgoMills = 3 * 24 * 60 * 60 * 1000;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -248,18 +253,89 @@ public class ReviewFragment extends Fragment implements OnClickListener {
     @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
+        try {
+            List<StudyPlan> l = dbHelper.getDao(StudyPlan.class).queryForAll();
+            if (l != null && l.size() != 0) {
+                plan = l.get(0);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Bundle bundle = new Bundle();
         switch (v.getId()) {
-            case R.id.wrodFirstExam:
-                Toast.makeText(getContext(), "FIRST", Toast.LENGTH_SHORT).show();
-                Act.toAct(getContext(), WordExamActivity.class);
+            case R.id.wrodFirstExam://生词练习
+                try {
+                    if (plan.currentLib.equals("lib1")) {
+                        Dao dao = dbHelper.getDao(LearnLib1Server.class);
+                        List<LearnLib1Server> ls = dao.queryBuilder().where().eq("graspLevel", 0).query();
+                        if (ls == null || ls.size() == 0) {
+                            Toast.makeText(getContext(), "暂时没有生词需要复习", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    } else if (plan.currentLib.equals("lib2")) {
+                        Dao dao = dbHelper.getDao(LearnLib2Server.class);
+                        List<LearnLib2Server> ls = dao.queryBuilder().where().eq("graspLevel", 0).query();
+                        if (ls == null || ls.size() == 0) {
+                            Toast.makeText(getContext(), "暂时没有生词需要复习", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                bundle.putInt("code", 0);
+                bundle.putString("currentLib", plan.currentLib);
+                Act.toAct(getContext(), WordExamActivity.class, bundle);
                 break;
-            case R.id.wrodSecondExam:
-                Toast.makeText(getContext(), "second", Toast.LENGTH_SHORT).show();
-                Act.toAct(getContext(), WordExamActivity.class);
+            case R.id.wrodSecondExam://熟词巩固
+                try {
+                    if (plan.currentLib.equals("lib1")) {
+                        Dao dao = dbHelper.getDao(LearnLib1Server.class);
+                        List<LearnLib1Server> ls = dao.queryBuilder().where().eq("graspLevel", 1).and().le("updataTime", new Date(new Date().getTime() - twoDaysAgoMills)).query();
+                        if (ls == null || ls.size() == 0) {
+                            Toast.makeText(getContext(), "暂时没有熟词需要复习", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    } else if (plan.currentLib.equals("lib2")) {
+                        Dao dao = dbHelper.getDao(LearnLib2Server.class);
+                        List<LearnLib2Server> ls = dao.queryBuilder().where().eq("graspLevel", 1).and().le("updataTime", new Date(new Date().getTime() - twoDaysAgoMills)).query();
+                        if (ls == null || ls.size() == 0) {
+                            Toast.makeText(getContext(), "暂时没有熟词需要复习", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                bundle.putInt("code", 1);
+                bundle.putString("currentLib", plan.currentLib);
+                Act.toAct(getContext(), WordExamActivity.class, bundle);
                 break;
-            case R.id.wrodThirdExam:
-                Toast.makeText(getContext(), "third", Toast.LENGTH_SHORT).show();
-                Act.toAct(getContext(), WordExamActivity.class);
+            case R.id.wrodThirdExam://词汇量测试
+                try {
+                    if (plan.currentLib.equals("lib1")) {
+                        Dao dao = dbHelper.getDao(LearnLib1Server.class);
+                        List<LearnLib1Server> ls = dao.queryBuilder().where().eq("graspLevel", 2).and().le("updataTime", new Date(new Date().getTime() - threeDaysAgoMills)).query();
+                        if (ls == null || ls.size() == 0) {
+                            Toast.makeText(getContext(), "暂时没有单词需要复习", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    } else if (plan.currentLib.equals("lib2")) {
+                        Dao dao = dbHelper.getDao(LearnLib2Server.class);
+                        List<LearnLib2Server> ls = dao.queryBuilder().where().eq("graspLevel", 2).and().le("updataTime", new Date(new Date().getTime() - threeDaysAgoMills)).query();
+                        if (ls == null || ls.size() == 0) {
+                            Toast.makeText(getContext(), "暂时没有单词需要复习", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                bundle.putInt("code", 1);
+                bundle.putString("currentLib", plan.currentLib);
+                Act.toAct(getContext(), WordExamActivity.class, bundle);
                 break;
         }
     }

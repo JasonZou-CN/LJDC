@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import com.ljdc.R;
 import com.ljdc.app.Config;
 import com.ljdc.utils.Act;
@@ -12,6 +13,7 @@ import com.ljdc.utils.Act;
 public class PersonInfoActivity extends Activity implements View.OnClickListener {
 
     private  SharedPreferences sp;
+    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class PersonInfoActivity extends Activity implements View.OnClickListener
 
     private void initView() {
         findViewById(R.id.logout).setOnClickListener(this);
+
+        title = (TextView) findViewById(R.id.title_center_tv);
+        title.setText("个人信息");
 
     }
 

@@ -71,9 +71,9 @@
                 android:id="@+id/wrodFirstExam">
 
             <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/listen_logo"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/shengci"
                     android:id="@+id/imageView4"/>
 
             <TextView
@@ -93,9 +93,9 @@
                 android:id="@+id/wrodSecondExam">
 
             <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/listen_logo"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/shouci"
 
                     android:id="@+id/imageView5"/>
 
@@ -116,9 +116,9 @@
                 android:id="@+id/wrodThirdExam">
 
             <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/listen_logo"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/cihuiliang"
 
                     android:id="@+id/imageView6"/>
 
