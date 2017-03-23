@@ -13,13 +13,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            >
 
         <RelativeLayout
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
             <TextView
                     android:layout_width="wrap_content"
@@ -59,7 +61,8 @@
                 android:background="@color/gray_cccccc"
                 />
         <RelativeLayout
-                android:paddingTop="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -80,16 +83,18 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true">
 
-                <TextView
+                <EditText
+                        android:id="@+id/nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="溪枫飘絮"
+                        android:background="@android:color/transparent"
+                        android:hint="个人昵称"
                         />
 
                 <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_arrow_forward_black_24dp"
                         />
             </LinearLayout>
@@ -124,14 +129,14 @@
                     android:layout_alignParentEnd="true">
 
                 <EditText
+                        android:id="@+id/phone"
                         android:layout_width="134dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:hint="18380430507"
+                        android:hint="绑定手机号"
                         android:textAlignment="textEnd"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
-                        android:textColor="@color/gray_cccccc"
                         />
             </LinearLayout>
 
@@ -165,6 +170,7 @@
                     android:layout_alignParentEnd="true">
 
                 <EditText
+                        android:id="@+id/email"
                         android:layout_width="201dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -172,7 +178,6 @@
                         android:hint="绑定邮箱"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
-                        android:textColor="@color/gray_cccccc"
                         />
             </LinearLayout>
 
@@ -206,12 +211,14 @@
                     android:layout_alignParentEnd="true">
 
                 <TextView
+                        android:id="@+id/id"
                         android:layout_width="201dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textAlignment="viewEnd"
                         android:text="68469877"
                         android:gravity="center_vertical"
+                        android:textSize="18sp"
                         android:textColor="@color/gray_cccccc"
                         />
             </LinearLayout>

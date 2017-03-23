@@ -142,6 +142,26 @@ public class DataSyncUtil implements Response.Listener<String> {
             parms.put(Config.PARAM_MAXANCHOR, maxAnchor);//参数为null，会导致请求不能成功
             new VolleyPostRequest(ctx).postRequest(parms, Config.SYNC_LIBS_URL, this);
 
+            //用户个人信息
+            dao = DBHelper.getHelper(ctx).getDao(UserServer.class);
+            whereQ = dao.queryBuilder().where().lt("status", 9);
+            List<UserServer> users = whereQ.query();
+            for (UserServer data : users) {
+                data.learnLib1 = null;
+                data.learnLib2 = null;
+                data.studyPlen = null;
+                data.wordDevelopment = null;
+            }
+            Log.d("users:json -> ", gson.toJson(users));
+            maxAnchor = selectMaxAnchor("user");
+            maxAnchor = maxAnchor == null ? "" : maxAnchor;
+            Log.d("table:user maxAnchor:", maxAnchor);
+            parms = new HashMap<>();//参数
+            parms.put(Config.PARAM_MAXANCHOR, maxAnchor);//参数为null，会导致请求不能成功
+            parms.put(Config.PARAM_SYNCJSONDATA, gson.toJson(users));
+            parms.put(Config.PARAM_USERID, Utils.getPreference(ctx, Config.PARAM_USERID));
+            new VolleyPostRequest(ctx).postRequest(parms, Config.SYNC_USER_URL, this);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -186,6 +206,12 @@ public class DataSyncUtil implements Response.Listener<String> {
                     updateLibsFromServer(libses, ctx);
                     App.WORDDEV_CHANGED = true;
                     break;
+                case 206://个人信息
+                    List<UserServer> users = gson.fromJson(msg, new TypeToken<List<UserServer>>() {
+                    }.getType());
+                    updateUserFromServer(users,ctx);
+                    break;
+
             }
             Toast.makeText(ctx, "同步成功", Toast.LENGTH_SHORT).show();
         } catch (UnsupportedEncodingException e) {
@@ -309,6 +335,20 @@ public class DataSyncUtil implements Response.Listener<String> {
             Dao dao = DBHelper.getHelper(ctx).getDao(datas.get(0).getClass());
             for (Libs data : datas) {
                 dao.createOrUpdate(data);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateUserFromServer(List<UserServer> datas, Context ctx) {
+        try {
+            if (datas == null || datas.size() <= 0) {
+                return;
+            }
+            Dao dao = DBHelper.getHelper(ctx).getDao(datas.get(0).getClass());
+            for (UserServer data : datas) {
+                dao.update(data);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,12 +1,14 @@
 package com.ljdc.pojo;
 
 import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 
 /**
@@ -48,6 +50,12 @@ public class UserServer implements Serializable{
 
     @ForeignCollectionField(eager = false)
     public Collection<StudyPlan> studyPlen;
+
+    @DatabaseField(columnName = "anchor", dataType = DataType.DATE_STRING, format = "yyyy-MM-dd HH:mm:ss", defaultValue = "1970-01-01 08:00:00")
+    public Date anchor;//同步锚点
+
+    @DatabaseField(columnName = "status",defaultValue = "0")
+    public int status;//同步状态
 
     public UserServer() {
     }

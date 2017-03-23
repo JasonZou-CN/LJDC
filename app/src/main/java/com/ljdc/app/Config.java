@@ -12,9 +12,9 @@ import java.util.Map;
 public class Config {
 
     /*注：完整URL为（http://dict-co.iciba.com/api/dictionaryphp?w=love&key=25C40D77809C22A3977F8C4B4CF3056D）
-                                        参数1:w;（单词）
-                                        参数2:key;（开发者秘钥）
-                                        */
+                                            参数1:w;（单词）
+                                            参数2:key;（开发者秘钥）
+                                            */
     public static String SEARCH_WORD_API_URL = "http://dict-co.iciba.com/api/dictionary.php";
     public static String SEARCH_WORD_API_KEY = "25C40D77809C22A3977F8C4B4CF3056D";
 
@@ -33,6 +33,7 @@ public class Config {
     public static final String SYNC_WORD_DEVELOP_URL = HOST_URL+"/sync/syncWordDevelop";
     public static final String SYNC_STUDY_PLAN_URL = HOST_URL+"/sync/syncStudyPlan";
     public static final String SYNC_LIBS_URL = HOST_URL+"/sync/syncLibs";
+    public static final String SYNC_USER_URL = HOST_URL+"/sync/syncUsers";
     public static final String PARAM_SYNCJSONDATA = "syncJsonData";
     public static final String PARAM_MAXANCHOR = "maxAnchor";//客户端最最近更新时间
     public static final String PARAM_USERID = "userId";
