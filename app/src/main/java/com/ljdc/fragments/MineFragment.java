@@ -15,6 +15,7 @@ import com.ljdc.activitys.PersonInfoActivity;
 import com.ljdc.app.Config;
 import com.ljdc.utils.Act;
 import com.ljdc.utils.DataSyncUtil;
+import com.ljdc.utils.NetWorkUtils;
 import com.ljdc.utils.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -104,8 +105,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.sync://数据同步
-                Toast.makeText(getActivity(), "正在同步数据", Toast.LENGTH_SHORT).show();
-                new DataSyncUtil().syncUserData(getContext());
+                if (new NetWorkUtils(getActivity()).getNetType() != 0){
+                    Toast.makeText(getActivity(), "正在同步数据", Toast.LENGTH_SHORT).show();
+                    new DataSyncUtil().syncUserData(getContext());
+                }else
+                    Toast.makeText(getActivity(), "网络未连接", Toast.LENGTH_SHORT).show();
+
 
                 break;
         }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.*;
 import com.j256.ormlite.dao.Dao;
@@ -12,6 +13,7 @@ import com.ljdc.R;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
 import com.ljdc.pojo.*;
+import com.ljdc.utils.NetWorkUtils;
 import com.ljdc.utils.Utils;
 
 import java.io.IOException;
@@ -24,7 +26,7 @@ import java.util.*;
 @SuppressWarnings("ALL")
 public class WordExamActivity extends Activity implements View.OnClickListener {
 
-    private final int maxProgress = 10;
+    private final int maxProgress = 5;
     private int twoDaysAgoMills = 2 * 24 * 60 * 60 * 1000;
     private int threeDaysAgoMills = 3 * 24 * 60 * 60 * 1000;
     private int oneDaysAgoMills = 1 * 24 * 60 * 60 * 1000;
@@ -58,6 +60,12 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
     private Dao lib1Dao;
     private Dao lib2Dao;
     private int defaultPron;//默认发音标记 0:Uk 1:Us
+    private int size; //菜单栏右侧：单词总数
+
+    private Handler uiHandler;
+    private Timer timer;//计时器，定级单词熟练度
+    private Dao learnLib1Dao;
+    private Dao learnLib2Dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +79,23 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
         initData();
         String s = Utils.getPreference(this, Config.SP_DEFAULT_PRON);
         defaultPron = Integer.parseInt(s.equals("") ? "0" : s);
+
+        uiHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 0: //计时器停止
+                        timer.cancel();
+                        break;
+                    case 1:
+                        progressBar.setProgress(progressNum--);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
     }
 
     private void initView() {
@@ -137,21 +162,20 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
      * 执行计时器
      */
     private void scheduleTimer() {
-        final Timer timer = new Timer();
+        if (timer != null)
+            timer.cancel();
+        timer = new Timer();
+
         progressNum = maxProgress;
         timer.schedule(new TimerTask() {
+            private int pos = currentIndex;
 
             @Override
             public void run() {
-                if (progressNum > 0)
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setProgress(--progressNum);
-                        }
-                    });
+                if (progressNum >= 0)
+                    uiHandler.sendEmptyMessage(1);
                 else
-                    timer.cancel();
+                    uiHandler.sendEmptyMessage(0);
             }
         }, 0, 1000);
     }
@@ -163,7 +187,8 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.play:
-                if (currentWord != null) {
+                int netType = new NetWorkUtils(this).getNetType();
+                if (currentWord != null && netType != 0) {
                     MediaPlayer mp = new MediaPlayer();//构建MediaPlayer对象
                     try {
                         switch (defaultPron) {
@@ -176,19 +201,21 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                         }
                         mp.prepare();//准备
                         mp.start();//开始播放
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    break;
                 }
+                break;
             case R.id.layoutA:
                 ivA.setVisibility(View.VISIBLE);
                 if (layoutA.getTag() != null) {
                     layoutA.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                    changeGraspToOther();
                 } else {
                     layoutA.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     layouts[rightPos].setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                     ivs[rightPos].setVisibility(View.VISIBLE);
+                    changeGraspToZero();
                 }
                 pass.setText("下一个");
                 break;
@@ -196,10 +223,12 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 ivB.setVisibility(View.VISIBLE);
                 if (layoutB.getTag() != null) {
                     layoutB.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                    changeGraspToOther();
                 } else {
                     layoutB.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     layouts[rightPos].setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                     ivs[rightPos].setVisibility(View.VISIBLE);
+                    changeGraspToZero();
                 }
                 pass.setText("下一个");
                 break;
@@ -207,10 +236,12 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 ivC.setVisibility(View.VISIBLE);
                 if (layoutC.getTag() != null) {
                     layoutC.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                    changeGraspToOther();
                 } else {
                     layoutC.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     layouts[rightPos].setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                     ivs[rightPos].setVisibility(View.VISIBLE);
+                    changeGraspToZero();
                 }
                 pass.setText("下一个");
                 break;
@@ -218,21 +249,114 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 ivD.setVisibility(View.VISIBLE);
                 if (layoutD.getTag() != null) {
                     layoutD.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                    changeGraspToOther();
                 } else {
                     layoutD.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     layouts[rightPos].setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                     ivs[rightPos].setVisibility(View.VISIBLE);
+                    changeGraspToZero();
                 }
                 pass.setText("下一个");
                 break;
             case R.id.pass:
                 currentIndex++;
+                if (size != 0 && currentIndex == size) {
+                    Toast.makeText(this, "测试完成,正在返回", Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+                }
+//                progressBar.setProgress(0);
                 initExamData();
                 if (pass.getText().toString().equals("下一个")) {
                     pass.setText("不认识");
                 }
                 break;
         }
+    }
+
+    /**
+     * 改变单词掌握度非0；
+     */
+    public void changeGraspToOther() {
+        if (learnLib1s != null) {
+            LearnLib1Server learnLib1 = learnLib1s.get(currentIndex);
+            if (code == 0) {
+                int graspLevel = 0;
+                int useTime = maxProgress - progressBar.getProgress();
+                if (useTime == maxProgress) {
+                    graspLevel = 1;//认识
+                } else if (useTime >= 0 && useTime < 4) {
+                    graspLevel = 2;//熟练
+                }
+
+                learnLib1.graspLevel = graspLevel;
+            } else if (learnLib1.graspLevel < 3)
+                learnLib1.graspLevel++;
+            learnLib1.updataTime = new Date();
+            learnLib1.statusModify = 1;
+            try {
+                if (learnLib1Dao == null)
+                    learnLib1Dao = dbHelper.getDao(LearnLib1Server.class);
+                learnLib1Dao.update(learnLib1);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else if (learnLib2s != null) {
+            LearnLib2Server learnLib2 = learnLib2s.get(currentIndex);
+            if (code == 0) {
+                int graspLevel = 0;
+                int useTime = maxProgress - progressBar.getProgress();
+                if (useTime == maxProgress) {
+                    graspLevel = 1;//认识
+                } else if (useTime >= 0 && useTime < 4) {
+                    graspLevel = 2;//熟练
+                }
+                learnLib2.graspLevel = graspLevel;
+            } else if (learnLib2.graspLevel < 3)
+                learnLib2.graspLevel++;
+            learnLib2.updataTime = new Date();
+            learnLib2.statusModify = 1;
+            try {
+                if (learnLib2Dao == null)
+                    learnLib2Dao = dbHelper.getDao(LearnLib2Server.class);
+                learnLib2Dao.update(learnLib2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 将单词掌握度设为0
+     */
+    public void changeGraspToZero() {
+
+        if (learnLib1s != null) {
+            LearnLib1Server learnLib1 = learnLib1s.get(currentIndex);
+            learnLib1.graspLevel = 0;
+            learnLib1.updataTime = new Date();
+            learnLib1.statusModify = 1;
+            try {
+                if (learnLib1Dao == null)
+                    learnLib1Dao = dbHelper.getDao(LearnLib1Server.class);
+                learnLib1Dao.update(learnLib1);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else if (learnLib2s != null) {
+            LearnLib2Server learnLib2 = learnLib2s.get(currentIndex);
+            learnLib2.graspLevel = 0;
+            learnLib2.updataTime = new Date();
+            learnLib2.statusModify = 1;
+            try {
+                if (learnLib2Dao == null)
+                    learnLib2Dao = dbHelper.getDao(LearnLib2Server.class);
+                learnLib2Dao.update(learnLib2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 /*
     public void changeBckOnClick(View view) {
@@ -286,9 +410,11 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
         }
 
         if (learnLib1s != null) {
-            rightView.setText("1/" + learnLib1s.size());
+            size = learnLib1s.size();
+            rightView.setText("1/" + size);
         } else if (learnLib2s != null) {
-            rightView.setText("1/" + learnLib2s.size());
+            size = learnLib2s.size();
+            rightView.setText("1/" + size);
         }
         initExamData();
     }
@@ -403,6 +529,7 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
         sections[rightPos].setText(currentWord.pos1 + currentWord.acceptation1);
 
         word.setText(currentWord.word);
+        rightView.setText(currentIndex + 1 + "/" + size);
         scheduleTimer();
 
     }

@@ -20,6 +20,7 @@ import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
 import com.ljdc.model.Word;
 import com.ljdc.pojo.*;
+import com.ljdc.utils.NetWorkUtils;
 import com.ljdc.utils.Utils;
 import org.w3c.dom.Text;
 
@@ -48,6 +49,8 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
         setContentView(R.layout.activity_study_word);
         String s = Utils.getPreference(this, Config.SP_DEFAULT_PRON);
         defaultPron = Integer.parseInt(s.equals("") ? "0" : s);
+
+        title = (TextView) findViewById(R.id.title_center_tv);
         initData();
         initView();
     }
@@ -58,13 +61,13 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
 
-        title = (TextView) findViewById(R.id.title_center_tv);
-        if (word != null) {
-            title.setText("单词详情");
-        } else {
-            //单词计划进来的
-            title.setText("学习 ：1/" + totalNum);
-        }
+
+//        if (word != null) {
+//            title.setText("单词详情");
+//        } else {
+//            //单词计划进来的
+//            title.setText("学习 ：1/" + totalNum);
+//        }
 
 
         vp_container = (ViewPager) findViewById(R.id.word_item_container);
@@ -134,15 +137,19 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                     totalNum = data.size();
                     pageAdapter = new QuickPageAdapter(data, getLayoutInflater());
                     word = data.get(0);
+
                 }
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            title.setText("学习 ：1/" + totalNum);
         } else {
             List<WordLibServer> data = new ArrayList<WordLibServer>();
             data.add(word);
             totalNum = data.size();
             pageAdapter = new QuickPageAdapter(data, getLayoutInflater());
+            title.setText("单词详情");
         }
 
 
@@ -156,7 +163,8 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                 break;
             case R.id.pron:
                 Toast.makeText(this, "发音", Toast.LENGTH_SHORT).show();
-                if (word != null) {
+                int netType = new NetWorkUtils(this).getNetType();
+                if (word != null && netType != 0) {
                     MediaPlayer mp = new MediaPlayer();//构建MediaPlayer对象
                     try {
                         switch (defaultPron) {

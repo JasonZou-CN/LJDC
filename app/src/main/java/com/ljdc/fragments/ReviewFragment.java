@@ -333,7 +333,7 @@ public class ReviewFragment extends Fragment implements OnClickListener {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                bundle.putInt("code", 1);
+                bundle.putInt("code", 2);
                 bundle.putString("currentLib", plan.currentLib);
                 Act.toAct(getContext(), WordExamActivity.class, bundle);
                 break;
