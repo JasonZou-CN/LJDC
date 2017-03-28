@@ -8,18 +8,22 @@ import android.view.View;
 import android.widget.*;
 import com.android.volley.Response;
 import com.google.gson.Gson;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.ColumnArg;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.query.In;
 import com.ljdc.R;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
 import com.ljdc.database.InitDatabase;
 import com.ljdc.model.Message;
-import com.ljdc.pojo.UserServer;
+import com.ljdc.pojo.*;
 import com.ljdc.utils.*;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -37,6 +41,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Res
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences(Config.SP_LJDC, Activity.MODE_PRIVATE);
         if (sp.getBoolean(Config.SP_IS_LOGIN, false)) {
+
+            DbUtil.initNewWordToLearn(this);
+
             System.out.println("忽略。。。");
             Act.toAct(this, MainActivity.class);
             this.finish();

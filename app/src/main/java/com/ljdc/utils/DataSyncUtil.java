@@ -162,6 +162,8 @@ public class DataSyncUtil implements Response.Listener<String> {
             parms.put(Config.PARAM_USERID, Utils.getPreference(ctx, Config.PARAM_USERID));
             new VolleyPostRequest(ctx).postRequest(parms, Config.SYNC_USER_URL, this);
 
+            DbUtil.initNewWordToLearn(ctx);//生成新生词
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -209,7 +211,7 @@ public class DataSyncUtil implements Response.Listener<String> {
                 case 206://个人信息
                     List<UserServer> users = gson.fromJson(msg, new TypeToken<List<UserServer>>() {
                     }.getType());
-                    updateUserFromServer(users,ctx);
+                    updateUserFromServer(users, ctx);
                     break;
 
             }

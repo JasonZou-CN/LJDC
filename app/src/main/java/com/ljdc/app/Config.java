@@ -22,8 +22,8 @@ public class Config {
     public static String SEARCH_WORD_API_URL_AFTER = "&key=" + SEARCH_WORD_API_KEY;
     public static String SEARCH_WORD_API_URL_AFTER_BY_JSON = "&type=json&key=" + SEARCH_WORD_API_KEY;
 
-        public static String LOCAL_IP = "192.168.191.1";
-//    public static String LOCAL_IP = "10.18.80.163";
+//        public static String LOCAL_IP = "192.168.191.1";
+    public static String LOCAL_IP = "10.18.80.163";
     public static String HOST_URL = "http://" + LOCAL_IP + ":8080";
     public static String REGISTER_URL = HOST_URL + "/verify/register";
     public static String LOGIN_URL = HOST_URL + "/verify/login";
@@ -52,6 +52,7 @@ public class Config {
     public static String SP_IS_DATABASE_INITED = "IS_DATABASE_INITED";
     public static String SP_IS_LOGIN = "IS_LOGIN";
     public static final String SP_DEFAULT_PRON = "default_pron";
+    public static final String SP_INITNEWWORD_LASTDATE = "init_new_word_lastdate";//最近生成生词的日期
 
     // 数据库同步 初始化
     public static String USER = "user.json";
@@ -62,6 +63,4 @@ public class Config {
     public static String LEARN_LIB1 = "learn_lib1.json";
     public static String LEARN_LIB2 = "learn_lib2.json";
 
-
-    public static String USER_ID;//TODO  注册时赋值 用户ID
 }
