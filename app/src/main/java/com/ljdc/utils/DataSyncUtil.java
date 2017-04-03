@@ -162,6 +162,14 @@ public class DataSyncUtil implements Response.Listener<String> {
             parms.put(Config.PARAM_USERID, Utils.getPreference(ctx, Config.PARAM_USERID));
             new VolleyPostRequest(ctx).postRequest(parms, Config.SYNC_USER_URL, this);
 
+            //词汇量预估数据表
+            maxAnchor = selectMaxAnchor("word_evalution");
+            maxAnchor = maxAnchor == null ? "" : maxAnchor;
+            parms = new HashMap<>();//参数
+            parms.put(Config.PARAM_MAXANCHOR, maxAnchor);//参数为null，会导致请求不能成功
+            new VolleyPostRequest(ctx).postRequest(parms, Config.SYNC_WORD_EVALUATION_URL, this);
+
+            //单词计划：生成每日计划学习的新单词
             DbUtil.initNewWordToLearn(ctx);//生成新生词
 
         } catch (SQLException e) {
@@ -212,6 +220,11 @@ public class DataSyncUtil implements Response.Listener<String> {
                     List<UserServer> users = gson.fromJson(msg, new TypeToken<List<UserServer>>() {
                     }.getType());
                     updateUserFromServer(users, ctx);
+                    break;
+                case 207:
+                    List<WordEvaluation> wordEvaluations = gson.fromJson(msg, new TypeToken<List<WordEvaluation>>() {
+                    }.getType());
+                    updateWordEvaluationFromServer(wordEvaluations, ctx);
                     break;
 
             }
@@ -351,6 +364,25 @@ public class DataSyncUtil implements Response.Listener<String> {
             Dao dao = DBHelper.getHelper(ctx).getDao(datas.get(0).getClass());
             for (UserServer data : datas) {
                 dao.update(data);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateWordEvaluationFromServer(List<WordEvaluation> datas, Context ctx) {
+        try {
+            if (datas == null || datas.size() <= 0) {
+                return;
+            }
+            Dao dao = DBHelper.getHelper(ctx).getDao(datas.get(0).getClass());
+            for (WordEvaluation data : datas) {
+                //TODO 设置外键ID
+                WordLibServer word = new WordLibServer();
+                word.wordId = data.wordId;
+                data.wordLib = word;
+
+                dao.createOrUpdate(data);
             }
         } catch (SQLException e) {
             e.printStackTrace();
