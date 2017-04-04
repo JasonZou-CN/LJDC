@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Describe: TODO 复习
+ * @Describe:
  * * * * ****** Created by ZOUXU ********
  */
 public class ReviewFragment extends Fragment implements OnClickListener {
@@ -125,6 +125,7 @@ public class ReviewFragment extends Fragment implements OnClickListener {
         content.findViewById(R.id.wrodFirstExam).setOnClickListener(this);
         content.findViewById(R.id.wrodSecondExam).setOnClickListener(this);
         content.findViewById(R.id.wrodThirdExam).setOnClickListener(this);
+        content.findViewById(R.id.wrodEvaluation).setOnClickListener(this);
 
         lineChart = (LineChart) content.findViewById(R.id.lineChart);
 //        initLineChart(lineChart);
@@ -252,7 +253,6 @@ public class ReviewFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         try {
             List<StudyPlan> l = dbHelper.getDao(StudyPlan.class).queryForAll();
             if (l != null && l.size() != 0) {
@@ -335,6 +335,12 @@ public class ReviewFragment extends Fragment implements OnClickListener {
                 }
                 bundle.putInt("code", 2);
                 bundle.putString("currentLib", plan.currentLib);
+                Act.toAct(getContext(), WordExamActivity.class, bundle);
+                break;
+            case R.id.wrodEvaluation :
+                // TODO: 2017/4/4 词汇量评估
+                //不用进行词汇预估表的验证NULL操作(不存在为NULL的情况)
+                bundle.putInt("code", 3);
                 Act.toAct(getContext(), WordExamActivity.class, bundle);
                 break;
         }

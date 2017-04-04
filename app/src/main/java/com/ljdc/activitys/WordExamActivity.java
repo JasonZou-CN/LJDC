@@ -1,6 +1,8 @@
 package com.ljdc.activitys;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -16,9 +18,9 @@ import com.ljdc.pojo.*;
 import com.ljdc.utils.NetWorkUtils;
 import com.ljdc.utils.Utils;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 词汇复习
@@ -26,6 +28,7 @@ import java.util.*;
 @SuppressWarnings("ALL")
 public class WordExamActivity extends Activity implements View.OnClickListener {
 
+    private static final int SCALE = 300;//词汇评估:固定预估值
     private final int maxProgress = 5;
     private int twoDaysAgoMills = 2 * 24 * 60 * 60 * 1000;
     private int threeDaysAgoMills = 3 * 24 * 60 * 60 * 1000;
@@ -39,16 +42,15 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
     private int code;//复习操作码:生词+熟词+词汇巩固
     private DBHelper dbHelper;
     private Dao dao;
-
     private TextView word;
     private ImageView play;
     private TextView sectionA, sectionB, sectionC, sectionD;
     private ImageView ivA, ivB, ivC, ivD;
     private Button pass;
     private LinearLayout layoutA, layoutB, layoutC, layoutD;
-
     private List<LearnLib1Server> learnLib1s = null;
     private List<LearnLib2Server> learnLib2s = null;
+    private List<WordEvaluation> wordEvaluations = null;
     private int currentIndex = 0;
     private WordLibServer currentWord;
     private List<WordLibServer> wrongWords;
@@ -61,13 +63,18 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
     private Dao lib2Dao;
     private int defaultPron;//默认发音标记 0:Uk 1:Us
     private int size; //菜单栏右侧：单词总数
-
     private Handler uiHandler;
     private Timer timer;//计时器，定级单词熟练度
     private Dao learnLib1Dao;
     private Dao learnLib2Dao;
+    private Dao wordEvaluationDao;
+    private Map<Integer, AtomicInteger> levelRightCount = null;//词汇量评估:每一级题目，正确答题的数量
+    private Map<Integer, Integer> LEVEL_TO_TOTAL_COUNT = null;//保存个层级词汇的总数
+    private long startQuizTime;
+    private long endQuizTime;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_exam);
@@ -152,8 +159,35 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 title.setText("熟词巩固");
                 break;
             case 2:
-                title.setText("词汇量测试");
+                title.setText("阶段巩固");
                 break;
+            case 3:
+                title.setText("词汇量评估");
+                break;
+        }
+        if (code == 3) {//初始化层级常量
+
+            LEVEL_TO_TOTAL_COUNT = new HashMap<>();
+            LEVEL_TO_TOTAL_COUNT.put(1, 5);
+            LEVEL_TO_TOTAL_COUNT.put(2, 10);
+            LEVEL_TO_TOTAL_COUNT.put(3, 15);
+            LEVEL_TO_TOTAL_COUNT.put(4, 15);
+            LEVEL_TO_TOTAL_COUNT.put(5, 15);
+            LEVEL_TO_TOTAL_COUNT.put(6, 10);
+            LEVEL_TO_TOTAL_COUNT.put(7, 10);
+            LEVEL_TO_TOTAL_COUNT.put(8, 10);
+            LEVEL_TO_TOTAL_COUNT.put(9, 10);
+
+            levelRightCount = new HashMap<>();
+            levelRightCount.put(1, new AtomicInteger(0));
+            levelRightCount.put(2, new AtomicInteger(0));
+            levelRightCount.put(3, new AtomicInteger(0));
+            levelRightCount.put(4, new AtomicInteger(0));
+            levelRightCount.put(5, new AtomicInteger(0));
+            levelRightCount.put(6, new AtomicInteger(0));
+            levelRightCount.put(7, new AtomicInteger(0));
+            levelRightCount.put(8, new AtomicInteger(0));
+            levelRightCount.put(9, new AtomicInteger(0));
         }
 
     }
@@ -163,7 +197,7 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
      */
     private void scheduleTimer() {
         if (timer != null)
-            timer.cancel();
+            timer.cancel();//执行了cancle()的timer不能再执行(schedule)新任务
         timer = new Timer();
 
         progressNum = maxProgress;
@@ -208,14 +242,20 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.layoutA:
                 ivA.setVisibility(View.VISIBLE);
-                if (layoutA.getTag() != null) {
+                if (layoutA.getTag() != null) {//当前题目的正确选项
                     layoutA.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
-                    changeGraspToOther();
+                    if (code == 3) {//词汇量评估
+                        addOneToRightLevelCount();
+                    } else {
+                        changeGraspToOther();
+                    }
+
                 } else {
                     layoutA.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     layouts[rightPos].setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                     ivs[rightPos].setVisibility(View.VISIBLE);
-                    changeGraspToZero();
+                    if (code != 3)
+                        changeGraspToZero();
                 }
                 pass.setText("下一个");
                 break;
@@ -223,12 +263,17 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 ivB.setVisibility(View.VISIBLE);
                 if (layoutB.getTag() != null) {
                     layoutB.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
-                    changeGraspToOther();
+                    if (code == 3) {//词汇量评估
+                        addOneToRightLevelCount();
+                    } else {
+                        changeGraspToOther();
+                    }
                 } else {
                     layoutB.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     layouts[rightPos].setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                     ivs[rightPos].setVisibility(View.VISIBLE);
-                    changeGraspToZero();
+                    if (code != 3)
+                        changeGraspToZero();
                 }
                 pass.setText("下一个");
                 break;
@@ -236,12 +281,17 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 ivC.setVisibility(View.VISIBLE);
                 if (layoutC.getTag() != null) {
                     layoutC.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
-                    changeGraspToOther();
+                    if (code == 3) {//词汇量评估
+                        addOneToRightLevelCount();
+                    } else {
+                        changeGraspToOther();
+                    }
                 } else {
                     layoutC.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     layouts[rightPos].setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                     ivs[rightPos].setVisibility(View.VISIBLE);
-                    changeGraspToZero();
+                    if (code != 3)
+                        changeGraspToZero();
                 }
                 pass.setText("下一个");
                 break;
@@ -249,20 +299,42 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 ivD.setVisibility(View.VISIBLE);
                 if (layoutD.getTag() != null) {
                     layoutD.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
-                    changeGraspToOther();
+                    if (code == 3) {//词汇量评估
+                        addOneToRightLevelCount();
+                    } else {
+                        changeGraspToOther();
+                    }
                 } else {
                     layoutD.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     layouts[rightPos].setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
                     ivs[rightPos].setVisibility(View.VISIBLE);
-                    changeGraspToZero();
+                    if (code != 3)
+                        changeGraspToZero();
                 }
                 pass.setText("下一个");
                 break;
             case R.id.pass:
                 currentIndex++;
                 if (size != 0 && currentIndex == size) {
-                    Toast.makeText(this, "测试完成,正在返回", Toast.LENGTH_SHORT).show();
-                    finish();
+                    if (code == 3) {
+                        // TODO: 2017/4/4 计算评估的词汇量
+                        int count = getEvaluationCount();
+                        System.out.println(">>>>>>>>>>>>>>>预估词汇量:" + count + "<<<<<<<<<<<<<<<<");
+                        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("词汇量评估").setMessage("您的词汇量预计为: " + count).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).show();
+                    } else {
+                        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(title.getText().toString()).setMessage("测试已经完成").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).show();
+                    }
+
                     break;
                 }
 //                progressBar.setProgress(0);
@@ -271,6 +343,63 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                     pass.setText("不认识");
                 }
                 break;
+        }
+    }
+
+    /**
+     * (算法)计算;评估词汇量
+     */
+    public int getEvaluationCount() {
+        //结束时间
+        endQuizTime = System.currentTimeMillis();
+        //预估总词数
+        float count = 0;
+        Set<Integer> levels = levelRightCount.keySet();
+        for (int i : levels) {
+            //计算每一个级别答对的比率 = 每一个级别答对的题数 / 每一个级别总的题数
+            float rightRate = levelRightCount.get(i).intValue() / (float) LEVEL_TO_TOTAL_COUNT.get(i);
+            //如果题目属于第一级, 则将第一级答对的比率乘以固定的预估值作为该题预估词数
+            if (i > 1) {
+                //如果题目不属于第一级, 则将上一级答对的比率和本级相乘
+                //然后用这个比率乘以固定的预估值作为该题预估词数
+                int lastLevel = i - 1;
+                float lastRightRate = levelRightCount.get(lastLevel).intValue()
+                        / (float) LEVEL_TO_TOTAL_COUNT.get(lastLevel);
+                //如果上一级全部答错, 则将上一级的答对比率固定设置为0.1
+                if (lastRightRate == 0) {
+                    lastRightRate = 0.1f;
+                }
+                rightRate *= lastRightRate;
+            }
+            count += SCALE * rightRate;
+        }
+        int cost = (480 - (int) (endQuizTime - startQuizTime) / 1000) * 20;
+        //期望答题时间是8分钟。每落后一秒钟预估词数减20, 最多减量不超过9600
+        if (cost < -9600) {
+            cost = -9600;
+        }
+        //期望答题时间是8分钟。每提前一秒钟预估词数加20，最多加量不超过3600
+        if (cost > 3600) {
+            cost = 3600;
+        }
+        //假定做题最快时间不少于4分钟，如果少于四分钟，每少N秒预估词数就减去4800+N*20
+        if (cost > 4800) {
+            cost = -cost;
+        }
+        //返回预估值
+        if ((count + cost) > 0) {
+            return (int) (count + cost);
+        }
+        //如果如上算法最后获得的预估词数是负数，则去除负号取绝对值
+        return (int) -(count + cost);
+    }
+
+    public void addOneToRightLevelCount() {
+        int level = wordEvaluations.get(currentIndex).level;
+        if (levelRightCount.containsKey(level)) {
+            levelRightCount.get(level).incrementAndGet();
+        } else {
+            levelRightCount.put(level, new AtomicInteger(1));
         }
     }
 
@@ -374,7 +503,38 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
         super.onStart();
         System.out.println("onStart:-------");
         try {
-            if (currentLib.equals("lib1")) {
+            if (code == 3) {
+                // 初始化词汇预估数据
+                if (wordEvaluationDao == null) {
+                    wordEvaluationDao = dbHelper.getDao(WordEvaluation.class);
+                }
+                if (wordEvaluations == null) {
+                    wordEvaluations = new ArrayList<>();
+                }
+//              wordEvaluations = wordEvaluationDao.queryBuilder().limit(100l).orderBy("level", true).query();
+                List<WordEvaluation> list;
+                list = wordEvaluationDao.queryBuilder().limit(5l).where().eq("level", 1).query();
+                wordEvaluations.addAll(list);
+                list = wordEvaluationDao.queryBuilder().limit(10l).where().eq("level", 2).query();
+                wordEvaluations.addAll(list);
+                list = wordEvaluationDao.queryBuilder().limit(15l).where().eq("level", 3).query();
+                wordEvaluations.addAll(list);
+                list = wordEvaluationDao.queryBuilder().limit(15l).where().eq("level", 4).query();
+                wordEvaluations.addAll(list);
+                list = wordEvaluationDao.queryBuilder().limit(15l).where().eq("level", 5).query();
+                wordEvaluations.addAll(list);
+                list = wordEvaluationDao.queryBuilder().limit(10l).where().eq("level", 6).query();
+                wordEvaluations.addAll(list);
+                list = wordEvaluationDao.queryBuilder().limit(10l).where().eq("level", 7).query();
+                wordEvaluations.addAll(list);
+                list = wordEvaluationDao.queryBuilder().limit(10l).where().eq("level", 8).query();
+                wordEvaluations.addAll(list);
+                list = wordEvaluationDao.queryBuilder().limit(10l).where().eq("level", 9).query();
+                wordEvaluations.addAll(list);
+                System.out.println(">>>>>>>>>>>>>>>>>>>>" + wordEvaluations.size() + "<<<<<<<<<<<<<<<:");
+
+
+            } else if (currentLib.equals("lib1")) {
                 dao = dbHelper.getDao(LearnLib1Server.class);
 //                List<LearnLib1Server> list;
                 switch (code) {
@@ -415,8 +575,14 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
         } else if (learnLib2s != null) {
             size = learnLib2s.size();
             rightView.setText("1/" + size);
+        } else if (wordEvaluations != null) {
+            size = wordEvaluations.size();
+            rightView.setText("1/" + size);
         }
         initExamData();
+        //开始测试时间
+        if (code == 3)
+            startQuizTime = System.currentTimeMillis();
     }
 
     @Override
@@ -477,6 +643,11 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                     wordDao = dbHelper.getDao(WordLibServer.class);
                 wordDao.refresh(learnLib2s.get(currentIndex).lib2.wordLib);
                 currentWord = learnLib2s.get(currentIndex).lib2.wordLib;
+            } else if (wordEvaluations != null) {
+                if (wordDao == null)
+                    wordDao = dbHelper.getDao(WordLibServer.class);
+                wordDao.refresh(wordEvaluations.get(currentIndex).wordLib);
+                currentWord = wordEvaluations.get(currentIndex).wordLib;
             }
 
             rightId = currentWord.wordId;
