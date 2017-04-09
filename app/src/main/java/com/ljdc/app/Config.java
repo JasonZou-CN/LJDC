@@ -39,6 +39,8 @@ public class Config {
     public static final String SYNC_LIBS_URL = HOST_URL + "/sync/syncLibs";
     public static final String SYNC_USER_URL = HOST_URL + "/sync/syncUsers";
     public static final String SYNC_WORD_EVALUATION_URL = HOST_URL + "/sync/syncWordEvaluation";
+    public static final String SYNC_LIB_URL = HOST_URL + "/sync/syncLib";
+    public static final String SYNC_REMOVE_LIB_URL = HOST_URL + "/sync/syncRemoveLib";
     public static String REGISTER_URL = HOST_URL + "/verify/register";
     public static String LOGIN_URL = HOST_URL + "/verify/login";
     public static String DEFAULT_STRING_CHARSET = "ISO-8859-1";

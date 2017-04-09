@@ -78,6 +78,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, StudyPlan.class);
             TableUtils.createTable(connectionSource, Libs.class);
             TableUtils.createTable(connectionSource, WordEvaluation.class);
+            TableUtils.createTable(connectionSource, Lib.class);
 
 
             //TODO 这里拿到的SQLiteDatabase  execSQL()只能执行一条SQL语句
@@ -106,6 +107,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, StudyPlan.class, true);
             TableUtils.dropTable(connectionSource, Libs.class, true);
             TableUtils.dropTable(connectionSource, WordEvaluation.class, true);
+            TableUtils.dropTable(connectionSource, Lib.class, true);
             onCreate(sqLiteDatabase, connectionSource);
         } catch (Exception e) {
             e.printStackTrace();

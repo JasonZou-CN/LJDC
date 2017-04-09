@@ -10,11 +10,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.ljdc.app.App;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
 import com.ljdc.model.Message;
+import com.ljdc.model.RemovedLib;
 import com.ljdc.pojo.*;
 
 import java.io.UnsupportedEncodingException;
@@ -49,6 +51,9 @@ public class DataSyncUtil implements Response.Listener<String> {
         String maxAnchor = "";
         this.ctx = ctx;
         try {
+
+            //被删除的词库
+            new VolleyPostRequest(ctx).postRequest(null, Config.SYNC_REMOVE_LIB_URL, this);
 
             //单词学习库1
             dao = DBHelper.getHelper(ctx).getDao(LearnLib1Server.class);
@@ -169,6 +174,13 @@ public class DataSyncUtil implements Response.Listener<String> {
             parms.put(Config.PARAM_MAXANCHOR, maxAnchor);//参数为null，会导致请求不能成功
             new VolleyPostRequest(ctx).postRequest(parms, Config.SYNC_WORD_EVALUATION_URL, this);
 
+            //词库
+            maxAnchor = selectMaxAnchor("lib");
+            maxAnchor = maxAnchor == null ? "" : maxAnchor;
+            parms = new HashMap<>();//参数
+            parms.put(Config.PARAM_MAXANCHOR, maxAnchor);//参数为null，会导致请求不能成功
+            new VolleyPostRequest(ctx).postRequest(parms, Config.SYNC_LIB_URL, this);
+
             //单词计划：生成每日计划学习的新单词
             DbUtil.initNewWordToLearn(ctx);//生成新生词
 
@@ -226,10 +238,47 @@ public class DataSyncUtil implements Response.Listener<String> {
                     }.getType());
                     updateWordEvaluationFromServer(wordEvaluations, ctx);
                     break;
+                case 208:
+                    List<Lib> libList = gson.fromJson(msg, new TypeToken<List<Lib>>() {
+                    }.getType());
+                    updateLibFromServer(libList, ctx);
+                    break;
+                case 209:
+                    List<RemovedLib> removedLibList = gson.fromJson(msg, new TypeToken<List<RemovedLib>>() {
+                    }.getType());
+                    removeLibFromServer(removedLibList, ctx);
+                    break;
 
             }
             Toast.makeText(ctx, "同步成功", Toast.LENGTH_SHORT).show();
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void removeLibFromServer(List<RemovedLib> datas, Context ctx) {
+        try {
+            if (datas == null || datas.size() <= 0) {
+                return;
+            }
+            List<String> libNameList = new ArrayList<>();
+            for (RemovedLib data : datas) {
+                libNameList.add(data.getLibName());
+            }
+
+            Dao libDao = DBHelper.getHelper(ctx).getDao(Lib.class);
+            DeleteBuilder deleteBuilder = libDao.deleteBuilder();
+            deleteBuilder.where().in("libName", libNameList);
+            deleteBuilder.delete();
+
+            Dao<Libs,Integer> libsDao = DBHelper.getHelper(ctx).getDao(Libs.class);
+            DeleteBuilder delLibsB = libsDao.deleteBuilder();
+            delLibsB.where().in("libName", libNameList);
+            delLibsB.delete();
+
+            // TODO: 2017/4/10 继续删除对应的学习记录
+            
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -383,6 +432,26 @@ public class DataSyncUtil implements Response.Listener<String> {
                 data.wordLib = word;
 
                 dao.createOrUpdate(data);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateLibFromServer(List<Lib> datas, Context ctx) {
+        try {
+            if (datas == null || datas.size() <= 0) {
+                return;
+            }
+            Dao dao = DBHelper.getHelper(ctx).getDao(datas.get(0).getClass());
+            for (Lib data : datas) {
+
+                WordLibServer word = new WordLibServer();
+                word.wordId = data.wordId;
+
+                data.wordLib = word;
+                dao.createOrUpdate(data);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
