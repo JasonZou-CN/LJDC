@@ -55,6 +55,28 @@ public class DataSyncUtil implements Response.Listener<String> {
             //被删除的词库
             new VolleyPostRequest(ctx).postRequest(null, Config.SYNC_REMOVE_LIB_URL, this);
 
+            //单词学习库 : LearnLib
+            dao = DBHelper.getHelper(ctx).getDao(LearnLib.class);
+            whereQ = dao.queryBuilder().where().lt("statusModify", 9);
+            List<LearnLib> learnLibList = whereQ.query();
+            maxAnchor = selectMaxAnchor("learn_lib");
+            maxAnchor = maxAnchor == null ? "1970-01-01 08:00:00" : maxAnchor;
+            Log.d("DataSyncUtil maxAnchor:", maxAnchor);
+            Log.d("DataSyncUtil", "learnLib1Servers.size():" + learnLibList.size());
+            for (LearnLib data : learnLibList) {//处理GSON解析过程中的异常
+                data.userId = data.user.userId;
+                data.libId = data.lib.libId;
+                data.user = null;
+                data.lib = null;
+            }
+            Log.d("DataSyncUtil json:", gson.toJson(learnLibList));
+            parms = new HashMap<>();//参数
+            parms.put(Config.PARAM_MAXANCHOR, maxAnchor);
+            parms.put(Config.PARAM_SYNCJSONDATA, gson.toJson(learnLibList));
+            parms.put(Config.PARAM_USERID, Utils.getPreference(ctx, Config.PARAM_USERID));
+            new VolleyPostRequest(ctx).postRequest(parms, Config.SYNC_LEARN_LIB_URL, this);
+
+
             //单词学习库1
             dao = DBHelper.getHelper(ctx).getDao(LearnLib1Server.class);
             whereQ = dao.queryBuilder().where().lt("statusModify", 9);
@@ -248,10 +270,34 @@ public class DataSyncUtil implements Response.Listener<String> {
                     }.getType());
                     removeLibFromServer(removedLibList, ctx);
                     break;
+                case 210:
+                    List<LearnLib> learnLibList = gson.fromJson(msg, new TypeToken<List<LearnLib>>() {
+                    }.getType());
+                    updateLearnLibFromServer(learnLibList, ctx);
+                    break;
 
             }
             Toast.makeText(ctx, "同步成功", Toast.LENGTH_SHORT).show();
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateLearnLibFromServer(List<LearnLib> learnLibList, Context ctx) {
+        try {
+            if (learnLibList.size() <= 0)
+                return;
+            Dao dao = DBHelper.getHelper(ctx).getDao(learnLibList.get(0).getClass());
+            for (LearnLib data : learnLibList) {
+                if (data.oldId != null && !data.oldId.isEmpty()) {
+                    dao.delete(new LearnLib(UUID.fromString(data.oldId)));
+                }
+                //关系
+                data.user = new UserServer(data.userId);
+                data.lib = new Lib(data.libId);
+                dao.createOrUpdate(data);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -271,13 +317,13 @@ public class DataSyncUtil implements Response.Listener<String> {
             deleteBuilder.where().in("libName", libNameList);
             deleteBuilder.delete();
 
-            Dao<Libs,Integer> libsDao = DBHelper.getHelper(ctx).getDao(Libs.class);
+            Dao<Libs, Integer> libsDao = DBHelper.getHelper(ctx).getDao(Libs.class);
             DeleteBuilder delLibsB = libsDao.deleteBuilder();
             delLibsB.where().in("libName", libNameList);
             delLibsB.delete();
 
             // TODO: 2017/4/10 继续删除对应的学习记录
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

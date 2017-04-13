@@ -30,4 +30,10 @@ public class Lib {
     public Date modified;
     public int wordId; //传递外键ID
 
+    public Lib(int libId) {
+        this.libId = libId;
+    }
+
+    public Lib() {
+    }
 }

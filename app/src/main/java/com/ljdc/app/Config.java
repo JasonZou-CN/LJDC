@@ -32,6 +32,7 @@ public class Config {
     public static String LOCAL_IP = "10.18.80.163";
     public static String HOST_URL = "http://" + LOCAL_IP + ":8080";
     public static final String ADD_WORD_URL = HOST_URL + "/sync/addOneWordToLib";
+    public static final String SYNC_LEARN_LIB_URL = HOST_URL + "/sync/syncLearnLib";
     public static final String SYNC_LEARN_LIB1_URL = HOST_URL + "/sync/syncLearnLib1";
     public static final String SYNC_LEARN_LIB2_URL = HOST_URL + "/sync/syncLearnLib2";
     public static final String SYNC_WORD_DEVELOP_URL = HOST_URL + "/sync/syncWordDevelop";
