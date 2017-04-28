@@ -11,6 +11,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.*;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.Where;
 import com.ljdc.R;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
@@ -48,6 +49,7 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
     private ImageView ivA, ivB, ivC, ivD;
     private Button pass;
     private LinearLayout layoutA, layoutB, layoutC, layoutD;
+    private List<LearnLib> learnLibList = null;
     private List<LearnLib1Server> learnLib1s = null;
     private List<LearnLib2Server> learnLib2s = null;
     private List<WordEvaluation> wordEvaluations = null;
@@ -59,12 +61,14 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
     private TextView[] sections;
     private ImageView[] ivs;
     private int rightPos; //正确选项位置
+    private Dao<Lib,Integer> libDao;
     private Dao lib1Dao;
     private Dao lib2Dao;
     private int defaultPron;//默认发音标记 0:Uk 1:Us
     private int size; //菜单栏右侧：单词总数
     private Handler uiHandler;
     private Timer timer;//计时器，定级单词熟练度
+    private Dao<LearnLib,Integer> learnLibD;
     private Dao learnLib1Dao;
     private Dao learnLib2Dao;
     private Dao wordEvaluationDao;
@@ -407,7 +411,29 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
      * 改变单词掌握度非0；
      */
     public void changeGraspToOther() {
-        if (learnLib1s != null) {
+        LearnLib learnLib = learnLibList.get(currentIndex);
+        if (code == 0) {
+            int graspLevel = 0;
+            int useTime = maxProgress - progressBar.getProgress();
+            if (useTime >= maxProgress) {
+                graspLevel = 1;//认识
+            } else if (useTime >= 0 && useTime < 4) {
+                graspLevel = 2;//熟练
+            }
+
+            learnLib.graspLevel = graspLevel;
+        } else if (learnLib.graspLevel < 3)
+            learnLib.graspLevel++;
+        learnLib.updateTime = new Date();
+        learnLib.statusModify = 1;
+        try {
+            if (learnLibD == null)
+                learnLibD = dbHelper.getDao(LearnLib.class);
+            learnLibD.update(learnLib);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        /*if (learnLib1s != null) {
             LearnLib1Server learnLib1 = learnLib1s.get(currentIndex);
             if (code == 0) {
                 int graspLevel = 0;
@@ -452,15 +478,26 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     /**
      * 将单词掌握度设为0
      */
     public void changeGraspToZero() {
+        LearnLib learnLib = learnLibList.get(currentIndex);
+        learnLib.graspLevel = 0;
+        learnLib.updateTime = new Date();
+        learnLib.statusModify = 1;
+        try {
+            if (learnLibD == null)
+                learnLibD = dbHelper.getDao(LearnLib.class);
+            learnLibD.update(learnLib);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        if (learnLib1s != null) {
+        /*if (learnLib1s != null) {
             LearnLib1Server learnLib1 = learnLib1s.get(currentIndex);
             learnLib1.graspLevel = 0;
             learnLib1.updataTime = new Date();
@@ -484,7 +521,8 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
+
 
     }
 /*
@@ -503,6 +541,7 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
         super.onStart();
         System.out.println("onStart:-------");
         try {
+            //词汇评估
             if (code == 3) {
                 // 初始化词汇预估数据
                 if (wordEvaluationDao == null) {
@@ -533,8 +572,8 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                 wordEvaluations.addAll(list);
                 System.out.println(">>>>>>>>>>>>>>>>>>>>" + wordEvaluations.size() + "<<<<<<<<<<<<<<<:");
 
-
-            } else if (currentLib.equals("lib1")) {
+                //非词汇量评估
+            } /*else if (currentLib.equals("lib1")) {
                 dao = dbHelper.getDao(LearnLib1Server.class);
 //                List<LearnLib1Server> list;
                 switch (code) {
@@ -563,17 +602,38 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                         learnLib2s = dao.queryBuilder().where().eq("graspLevel", 2).and().le("updataTime", new Date(new Date().getTime() - threeDaysAgoMills)).query();
                         break;
                 }
+            }*/ else {
+                //查找词库，
+                Dao libD = DBHelper.getHelper(this).getDao(Lib.class);
+                Where libW = libD.queryBuilder().selectColumns("libId").where().eq("libName", currentLib);
+                Dao learnLibD = DBHelper.getHelper(this).getDao(LearnLib.class);
+                switch (code) {
+                    case 0:
+                        learnLibList = learnLibD.queryBuilder().where().in("libId", libW.query()).and().eq("graspLevel", 0).query();
+                        break;
+                    case 1:
+                        learnLibList = learnLibD.queryBuilder().where().in("libId", libW.query()).and().eq("graspLevel", 1).and().le("updateTime", new Date(new Date().getTime() - twoDaysAgoMills)).query();
+                        break;
+                    case 2:
+                        learnLibList = learnLibD.queryBuilder().where().in("libId", libW.query()).and().eq("graspLevel", 2).and().le("updateTime", new Date(new Date().getTime() - threeDaysAgoMills)).query();
+                        break;
+                }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        if (learnLib1s != null) {
+        /*if (learnLib1s != null) {
             size = learnLib1s.size();
             rightView.setText("1/" + size);
         } else if (learnLib2s != null) {
             size = learnLib2s.size();
+            rightView.setText("1/" + size);
+        } */
+
+        if (learnLibList != null) {
+            size = learnLibList.size();
             rightView.setText("1/" + size);
         } else if (wordEvaluations != null) {
             size = wordEvaluations.size();
@@ -627,7 +687,7 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
         int base = 0;
         int rightId = -1;
         try {
-            if (learnLib1s != null) {
+            /*if (learnLib1s != null) {
                 if (lib1Dao == null)
                     lib1Dao = dbHelper.getDao(Lib1EnglishGrand4CoreServer.class);
                 lib1Dao.refresh(learnLib1s.get(currentIndex).lib1);
@@ -643,7 +703,16 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
                     wordDao = dbHelper.getDao(WordLibServer.class);
                 wordDao.refresh(learnLib2s.get(currentIndex).lib2.wordLib);
                 currentWord = learnLib2s.get(currentIndex).lib2.wordLib;
-            } else if (wordEvaluations != null) {
+            } */
+            if(learnLibList!=null){
+                if (libDao == null)
+                    libDao = dbHelper.getDao(Lib.class);
+                libDao.refresh(learnLibList.get(currentIndex).lib);
+                if (wordDao == null)
+                    wordDao = dbHelper.getDao(WordLibServer.class);
+                wordDao.refresh(learnLibList.get(currentIndex).lib.wordLib);
+                currentWord = learnLibList.get(currentIndex).lib.wordLib;
+            }else if (wordEvaluations != null) {
                 if (wordDao == null)
                     wordDao = dbHelper.getDao(WordLibServer.class);
                 wordDao.refresh(wordEvaluations.get(currentIndex).wordLib);

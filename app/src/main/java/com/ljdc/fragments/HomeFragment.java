@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
                 if (null == contacts[2]) {
                     contacts[2] = new HomeTabCFragment();
                     ft.add(R.id.frag_my_contacts_container, contacts[2],
-                            BlankFragment.class.getSimpleName());
+                            HomeTabCFragment.class.getSimpleName());
                 } else {
                     ft.show(contacts[2]);
                 }

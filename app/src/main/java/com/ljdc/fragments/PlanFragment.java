@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.PercentFormatter;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.Where;
 import com.ljdc.R;
 import com.ljdc.activitys.MainActivity;
 import com.ljdc.activitys.WordExamActivity;
@@ -71,23 +72,27 @@ public class PlanFragment extends Fragment implements OnClickListener {
         mChart = (PieChart) content.findViewById(R.id.pieChart);
         int[] data = new int[]{0, 0, 0, 0};
         try {
-            String table = null;
+            String currentLib = null;
             dbHelper = DBHelper.getHelper(getActivity());
             List<StudyPlan> studyPlen = dbHelper.getDao(StudyPlan.class).queryForAll();
             if (studyPlen != null && studyPlen.size() != 0) {
                 StudyPlan studyPlan = studyPlen.get(0);
-                table = studyPlan.currentLib;
-                if (table != null && table.equals("lib1")) {
-                    dao = dbHelper.getDao(LearnLib1Server.class);
-                } else if (table != null && table.equals("lib2")) {
-                    dao = dbHelper.getDao(LearnLib2Server.class);
-                }
+                currentLib = studyPlan.currentLib;
+//                if (table != null && table.equals("lib1")) {
+//                    dao = dbHelper.getDao(LearnLib1Server.class);
+//                } else if (table != null && table.equals("lib2")) {
+//                    dao = dbHelper.getDao(LearnLib2Server.class);
+//                }
+                Dao<Lib, Integer> libD = DBHelper.getHelper(getActivity()).getDao(Lib.class);
+                Where<Lib, Integer> libW = libD.queryBuilder().selectColumns("libId").where().eq("libName", currentLib);
+                List<Lib> list = libW.query();
+                dao = dbHelper.getDao(LearnLib.class);
                 if (dao != null) {
                     //TODO 已经学过的单词的词汇构成
-                    data[0] = dao.queryBuilder().where().eq("graspLevel", "0").query().size() + studyPlan.leftNum;//生词
-                    data[1] = dao.queryBuilder().where().eq("graspLevel", "1").query().size();//认识
-                    data[2] = dao.queryBuilder().where().eq("graspLevel", "2").query().size();//熟悉
-                    data[3] = dao.queryBuilder().where().eq("graspLevel", "3").query().size();//掌握
+                    data[0] = dao.queryBuilder().where().in("libId", list).and().eq("graspLevel", "0").query().size() + studyPlan.leftNum;//生词
+                    data[1] = dao.queryBuilder().where().in("libId", list).and().eq("graspLevel", "1").query().size();//认识
+                    data[2] = dao.queryBuilder().where().in("libId", list).and().eq("graspLevel", "2").query().size();//熟悉
+                    data[3] = dao.queryBuilder().where().in("libId", list).and().eq("graspLevel", "3").query().size();//掌握
                 }
             }
 

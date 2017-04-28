@@ -18,6 +18,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.stmt.query.Clause;
 import com.ljdc.R;
 import com.ljdc.activitys.MainActivity;
@@ -34,8 +36,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Describe:
- * * * * ****** Created by ZOUXU ********
+ * @Describe: * * * ****** Created by ZOUXU ********
  */
 public class ReviewFragment extends Fragment implements OnClickListener {
 
@@ -195,7 +196,7 @@ public class ReviewFragment extends Fragment implements OnClickListener {
         }
 
         //折线数据1
-        LineDataSet d1 = new LineDataSet(e1, "熟词量");
+        LineDataSet d1 = new LineDataSet(e1, "熟悉");
         d1.setLineWidth(2.5f);
         d1.setCircleSize(4.5f);
         d1.setHighLightColor(Color.rgb(244, 117, 117));
@@ -218,7 +219,7 @@ public class ReviewFragment extends Fragment implements OnClickListener {
         }
 
         //折线数据2
-        LineDataSet d2 = new LineDataSet(e2, "词汇量");
+        LineDataSet d2 = new LineDataSet(e2, "掌握");
         d2.setLineWidth(2.5f);
         d2.setCircleSize(4.5f);
         d2.setHighLightColor(Color.rgb(244, 117, 117));
@@ -253,11 +254,18 @@ public class ReviewFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Dao<Lib, Integer> libD;
+        Where<Lib, Integer> libW = null;
+        Dao<LearnLib, Integer> learnLibD = null;
         try {
             List<StudyPlan> l = dbHelper.getDao(StudyPlan.class).queryForAll();
             if (l != null && l.size() != 0) {
                 plan = l.get(0);
             }
+            //查找词库，
+            libD = DBHelper.getHelper(getActivity()).getDao(Lib.class);
+            libW = libD.queryBuilder().selectColumns("libId").where().eq("libName", plan.currentLib);
+            learnLibD = DBHelper.getHelper(getActivity()).getDao(LearnLib.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -265,7 +273,7 @@ public class ReviewFragment extends Fragment implements OnClickListener {
         switch (v.getId()) {
             case R.id.wrodFirstExam://生词练习
                 try {
-                    if (plan.currentLib.equals("lib1")) {
+                    /*if (plan.currentLib.equals("lib1")) {
                         Dao dao = dbHelper.getDao(LearnLib1Server.class);
                         List<LearnLib1Server> ls = dao.queryBuilder().where().eq("graspLevel", 0).query();
                         if (ls == null || ls.size() == 0) {
@@ -279,8 +287,14 @@ public class ReviewFragment extends Fragment implements OnClickListener {
                             Toast.makeText(getContext(), "暂时没有生词需要复习", Toast.LENGTH_SHORT).show();
                             break;
                         }
+                    }*/
 
+                    int num = learnLibD.queryBuilder().where().in("libId", libW.query()).and().eq("graspLevel", 0).query().size();
+                    if (num == 0) {
+                        Toast.makeText(getContext(), "暂时没有生词需要复习", Toast.LENGTH_SHORT).show();
+                        break;
                     }
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -290,7 +304,7 @@ public class ReviewFragment extends Fragment implements OnClickListener {
                 break;
             case R.id.wrodSecondExam://熟词巩固
                 try {
-                    if (plan.currentLib.equals("lib1")) {
+                    /*if (plan.currentLib.equals("lib1")) {
                         Dao dao = dbHelper.getDao(LearnLib1Server.class);
                         List<LearnLib1Server> ls = dao.queryBuilder().where().eq("graspLevel", 1).and().le("updataTime", new Date(new Date().getTime() - twoDaysAgoMills)).query();
                         if (ls == null || ls.size() == 0) {
@@ -304,8 +318,14 @@ public class ReviewFragment extends Fragment implements OnClickListener {
                             Toast.makeText(getContext(), "暂时没有熟词需要复习", Toast.LENGTH_SHORT).show();
                             break;
                         }
+                    }*/
 
+                    int num = learnLibD.queryBuilder().where().in("libId", libW.query()).and().eq("graspLevel", 1).and().le("updateTime", new Date(new Date().getTime() - twoDaysAgoMills)).query().size();
+                    if (num == 0) {
+                        Toast.makeText(getContext(), "暂时没有熟词需要复习", Toast.LENGTH_SHORT).show();
+                        break;
                     }
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -313,9 +333,9 @@ public class ReviewFragment extends Fragment implements OnClickListener {
                 bundle.putString("currentLib", plan.currentLib);
                 Act.toAct(getContext(), WordExamActivity.class, bundle);
                 break;
-            case R.id.wrodThirdExam://词汇量测试
+            case R.id.wrodThirdExam://阶段测试
                 try {
-                    if (plan.currentLib.equals("lib1")) {
+                    /*if (plan.currentLib.equals("lib1")) {
                         Dao dao = dbHelper.getDao(LearnLib1Server.class);
                         List<LearnLib1Server> ls = dao.queryBuilder().where().eq("graspLevel", 2).and().le("updataTime", new Date(new Date().getTime() - threeDaysAgoMills)).query();
                         if (ls == null || ls.size() == 0) {
@@ -329,6 +349,12 @@ public class ReviewFragment extends Fragment implements OnClickListener {
                             Toast.makeText(getContext(), "暂时没有单词需要复习", Toast.LENGTH_SHORT).show();
                             break;
                         }
+                    }*/
+
+                    int num = learnLibD.queryBuilder().where().in("libId", libW.query()).and().eq("graspLevel", 2).and().le("updateTime", new Date(new Date().getTime() - threeDaysAgoMills)).query().size();
+                    if (num == 0) {
+                        Toast.makeText(getContext(), "暂时没有熟词需要复习", Toast.LENGTH_SHORT).show();
+                        break;
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -337,7 +363,7 @@ public class ReviewFragment extends Fragment implements OnClickListener {
                 bundle.putString("currentLib", plan.currentLib);
                 Act.toAct(getContext(), WordExamActivity.class, bundle);
                 break;
-            case R.id.wrodEvaluation :
+            case R.id.wrodEvaluation:
                 // TODO: 2017/4/4 词汇量评估
                 //不用进行词汇预估表的验证NULL操作(不存在为NULL的情况)
                 bundle.putInt("code", 3);

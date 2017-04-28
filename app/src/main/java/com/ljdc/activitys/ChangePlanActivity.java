@@ -9,20 +9,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.j256.ormlite.dao.Dao;
 import com.ljdc.R;
-import com.ljdc.app.App;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
-import com.ljdc.pojo.*;
+import com.ljdc.pojo.Libs;
+import com.ljdc.pojo.StudyPlan;
+import com.ljdc.pojo.UserServer;
 import com.ljdc.utils.DbUtil;
 import com.ljdc.utils.Utils;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
- *
+ *修改学习计划Activity
  */
 @SuppressWarnings("ALL")
 public class ChangePlanActivity extends Activity implements View.OnClickListener, NumberPicker.OnValueChangeListener, NumberPicker.OnScrollListener, NumberPicker.Formatter {
@@ -32,7 +36,7 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
     private TextView tv_totalNum, studyProgress, finishDate, planDesc, libName;
     //bundle参数
     private StudyPlan studyPlan = null, newStudyPlan = null;
-    private HashMap<String, String> libs;
+//    private HashMap<String, String> libs;
     private String[] daysArr;
     private String[] words;
     private TextView tv_sure;
@@ -50,11 +54,13 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_plan);
-        libs = new HashMap<>();
+        /*libs = new HashMap<>();
         libs.put("lib1", "英语四级核心词汇");
-        libs.put("lib2", "中学英语核心词汇");
+        libs.put("lib2", "中学英语核心词汇");*/
 
+        //OPT1:主页面进入
         studyPlan = (StudyPlan) getIntent().getSerializableExtra("studyPlan");
+        //OPT2:词库列表进入
         libsInfo = (Libs) getIntent().getSerializableExtra("libs");
 //        lib = getIntent().getStringExtra("lib");
         initView();
@@ -101,8 +107,8 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
             String dateStr = new SimpleDateFormat("yyyy年MM月dd日").format(studyPlan.finishDate);
             finishDate.setText(dateStr);
             String desc = getResources().getString(R.string.plan_desc);
-            desc = String.format(desc, libs.get(studyPlan.currentLib), studyPlan.leftNum, dateStr);
-            libName.setText(libs.get(studyPlan.currentLib));
+            desc = String.format(desc, studyPlan.currentLib, studyPlan.leftNum, dateStr);
+            libName.setText(studyPlan.currentLib);
             planDesc.setText(desc);
 
             double percent = 0;
@@ -111,6 +117,7 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
             percent = DbUtil.getPercent(table, totalNum, this);
             studyProgress.setText(new DecimalFormat("###.##%").format(percent));
 
+            //找到选择器的数据序号
             int num = 0;
             for (int i = 0; i < words.length; i++) {
                 num = Integer.parseInt(words[i]);
@@ -123,7 +130,7 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
             if (newStudyPlan == null) {
                 newStudyPlan = new StudyPlan();
             }
-            lib = libsInfo.tableName;
+            lib = libsInfo.libName;
             totalNum = libsInfo.totalNum;
             tv_totalNum.setText(libsInfo.totalNum + "");
             finishDate.setText("暂无");
@@ -178,14 +185,18 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
             case R.id.title_right_layout:
                 try {
                     Dao dao = DBHelper.getHelper(this).getDao(StudyPlan.class);
-                    if (studyPlan != null) {
+                    if (studyPlan != null) {//主页面进入的情况:
                         dao.update(studyPlan);
-                    } else {
+                    } else {//词库选择页面进入
                         List<StudyPlan> plen = dao.queryForAll();
                         StudyPlan plan = null;
                         if (plen != null && plen.size() != 0) {
+                            if (finishDate == null) {//没有设置具体计划，无预计结束日期
+                                finish();
+                                break;
+                            }
                             plan = plen.get(0);
-                            plan.currentLib = libsInfo.tableName;
+                            plan.currentLib = libsInfo.libName;
                             plan.totalNum = totalNum;
                             plan.leftNum = leftNum;
                             plan.finishDate = finiDate;
@@ -196,12 +207,16 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
                             dao.update(plan);
 
                         } else if (plen != null && plen.size() == 0) {
+                            if (finishDate == null) {//没有设置具体计划，无预计结束日期
+                                finish();
+                                break;
+                            }
                             plan = new StudyPlan();
                             plan.planId = UUID.randomUUID();
                             int userId = Integer.parseInt(Utils.getPreference(this, Config.PARAM_USERID));
                             plan.user = new UserServer(userId);
 
-                            plan.currentLib = libsInfo.tableName;
+                            plan.currentLib = libsInfo.libName;
                             plan.totalNum = totalNum;
                             plan.leftNum = leftNum;
                             plan.finishDate = finiDate;
@@ -237,7 +252,7 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
 
                 break;
         }
-        if (studyPlan != null && libs != null) {
+        if (studyPlan != null) {
             //两个选择对应ID一一对应
             int daysMill = Integer.parseInt(daysArr[newVal]);
             int daysWord = Integer.parseInt(words[newVal]);
@@ -249,7 +264,7 @@ public class ChangePlanActivity extends Activity implements View.OnClickListener
             String dateStr = new SimpleDateFormat("yyyy年MM月dd日").format(endDate);
             Log.d("ChangePlanActivity", dateStr);
             String desc = getResources().getString(R.string.plan_desc);
-            desc = String.format(desc, libs.get(studyPlan.currentLib), studyPlan.leftNum, dateStr);
+            desc = String.format(desc, studyPlan.currentLib, studyPlan.leftNum, dateStr);
             planDesc.setText(desc);
         } else if (libsInfo != null) {
             //两个选择对应ID一一对应

@@ -1,14 +1,11 @@
 package com.ljdc.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.Button;
 import android.widget.TextView;
 import com.j256.ormlite.dao.Dao;
@@ -22,11 +19,8 @@ import com.ljdc.utils.Utils;
 import com.ljdc.views.RoundProgressBar;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -42,13 +36,13 @@ public class HomeTabAFragment extends Fragment implements View.OnClickListener {
     private TextView leftDays, planOfDay, currentLib, finishProgress;
     private DBHelper dbHelper;
     private Dao dao;
-    private Map<String, String> libs;
+//    private Map<String, String> libs;
 
     public HomeTabAFragment() {
         // Required empty public constructor
-        libs = new HashMap<>();
+        /*libs = new HashMap<>();
         libs.put("lib1", "英语四级核心词汇");
-        libs.put("lib2", "中学英语核心词汇");
+        libs.put("lib2", "中学英语核心词汇");*/
     }
 
 
@@ -73,7 +67,7 @@ public class HomeTabAFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
-        System.out.println("onStart : "+"锚点");
+        System.out.println("onStart : " + "锚点");
         initData();
 
     }
@@ -91,13 +85,14 @@ public class HomeTabAFragment extends Fragment implements View.OnClickListener {
             progressRound.setValue(studyPlan == null ? 0 : studyPlan.doOfDay);
             finishProgress.setText(studyPlan == null ? "无" : studyPlan.doOfDay + "/" + studyPlan.planOfDay);
             leftDays.setText(studyPlan == null ? "0" : Utils.getTwodateDayByDate(new Date(), studyPlan.finishDate) + "");
-            if (studyPlan == null) {
+           /* if (studyPlan == null) {
                 currentLib.setText("无");
             } else if (libs.containsKey(studyPlan.currentLib)) {
                 currentLib.setText(libs.get(studyPlan.currentLib));
             } else {
                 Log.d("HomeTabAFragment", "在App实例中没有匹配的词库名" + studyPlan.currentLib);
-            }
+            }*/
+            currentLib.setText(studyPlan == null ? "无" : studyPlan.currentLib);
             planOfDay.setText(studyPlan == null ? "0" : studyPlan.planOfDay + "");
         } catch (SQLException e) {
             e.printStackTrace();

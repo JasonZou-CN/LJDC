@@ -14,18 +14,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.ljdc.R;
 import com.ljdc.app.Config;
 import com.ljdc.database.DBHelper;
-import com.ljdc.model.Word;
-import com.ljdc.pojo.*;
+import com.ljdc.pojo.LearnLib;
+import com.ljdc.pojo.Lib;
+import com.ljdc.pojo.StudyPlan;
+import com.ljdc.pojo.WordLibServer;
 import com.ljdc.utils.NetWorkUtils;
 import com.ljdc.utils.Utils;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +117,7 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                     //数据列表
                     data = new ArrayList<WordLibServer>();
                     //TODO 当前正在学习的词库，索取需要需要的单词
-                    if (plan.currentLib.equals("lib1")) {
+                   /* if (plan.currentLib.equals("lib1")) {
                         QueryBuilder query = dbHelper.getDao(LearnLib1Server.class).queryBuilder();
                         List<LearnLib1Server> listLearnLib = query.where().eq("graspLevel", 0).query();
                         for (LearnLib1Server d : listLearnLib) {
@@ -133,6 +133,20 @@ public class StudyWordActivity extends Activity implements View.OnClickListener 
                             dbHelper.getDao(WordLibServer.class).refresh(d.lib2.wordLib);
                             data.add(d.lib2.wordLib);
                         }
+                    }*/
+                    Dao<Lib, Integer> libD = dbHelper.getDao(Lib.class);
+                    Where<Lib, Integer> libW = libD.queryBuilder().selectColumns("libId").where().eq("libName", plan.currentLib);
+                    Dao<LearnLib, Integer> learnLibD = dbHelper.getDao(LearnLib.class);
+                    List<LearnLib> learnLibList = learnLibD.queryBuilder().where().in("libId", libW.query()).and().eq("graspLevel", 0).query();
+                    //查询结果的List不会为NULL
+                    if (learnLibList.size() == 0) {
+                        finish();
+                        return;
+                    }
+                    for (LearnLib learnLib : learnLibList) {
+                        dbHelper.getDao(Lib.class).refresh(learnLib.lib);
+                        dbHelper.getDao(WordLibServer.class).refresh(learnLib.lib.wordLib);
+                        data.add(learnLib.lib.wordLib);
                     }
                     totalNum = data.size();
                     pageAdapter = new QuickPageAdapter(data, getLayoutInflater());

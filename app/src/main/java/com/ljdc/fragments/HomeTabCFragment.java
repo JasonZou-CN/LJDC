@@ -10,13 +10,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.Where;
 import com.ljdc.R;
 import com.ljdc.activitys.StudyWordActivity;
 import com.ljdc.adapters.LibrarysAdapterLV;
 import com.ljdc.database.DBHelper;
-import com.ljdc.model.LibraryInfo;
-import com.ljdc.pojo.LearnLib1Server;
-import com.ljdc.pojo.LearnLib2Server;
+import com.ljdc.pojo.LearnLib;
+import com.ljdc.pojo.Lib;
 import com.ljdc.pojo.Libs;
 import com.ljdc.pojo.StudyPlan;
 import com.ljdc.utils.Act;
@@ -54,9 +54,15 @@ public class HomeTabCFragment extends Fragment implements View.OnClickListener {
         this.inflater = inflater;
         content = (ViewGroup) inflater.inflate(R.layout.frag_home_sub_library, null);
         initView(content);
-        initData();
+//        initData();
         return content;
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initData();
     }
 
     void initView(ViewGroup content) {
@@ -73,6 +79,7 @@ public class HomeTabCFragment extends Fragment implements View.OnClickListener {
     private void initData() {
         DBHelper dbHelper;
         String libName = "";
+        //获取词库列表，词库学习计划
         try {
             dbHelper = DBHelper.getHelper(getActivity());
             List<StudyPlan> studyPlen = dbHelper.getDao(StudyPlan.class).queryForAll();
@@ -86,11 +93,12 @@ public class HomeTabCFragment extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
+        //当前词库学习情况
         if (studyPlan != null && libses != null & libses.size() != 0) {
 
             for (int i = 0; i < libses.size(); i++) {
                 Libs libs = libses.get(i);
-                if (libs.tableName.equals(studyPlan.currentLib)) {
+                if (libs.libName.equals(studyPlan.currentLib)) {
                     libName = libs.libName;
                     libses.remove(libs);//不显示在列表中
                     break;
@@ -109,6 +117,7 @@ public class HomeTabCFragment extends Fragment implements View.OnClickListener {
             finishDate.setText("暂无");
         }
 
+        //词库列表:除开当前
         if (libses != null && libses.size() != 0) {
             List<Libs> data = new ArrayList<Libs>();
             for (Libs libs : libses) {
@@ -119,6 +128,7 @@ public class HomeTabCFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    // TODO: 2017/4/16 删掉这个点击事件监听
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -131,20 +141,25 @@ public class HomeTabCFragment extends Fragment implements View.OnClickListener {
     /**
      * 获取已经学习的单词占比词库总数
      *
-     * @param table
+     * @param currentLib
      * @param totalNum
      * @return
      */
-    public double getPercent(String table, int totalNum) {
+    public double getPercent(String currentLib, int totalNum) {
         double percent = 0;
         try {
-            Dao dao = null;
-            if (table.equals("lib1")) {
+            Dao<LearnLib,Integer> learnLibD = null;
+            /*if (currentLib.equals("lib1")) {
                 dao = DBHelper.getHelper(getActivity()).getDao(LearnLib1Server.class);
-            } else if (table.equals("lib2")) {
+            } else if (currentLib.equals("lib2")) {
                 dao = DBHelper.getHelper(getActivity()).getDao(LearnLib2Server.class);
             }
-            int num = dao.queryBuilder().where().gt("graspLevel", 0).query().size();//大于0 ，学过的词汇
+            int num = dao.queryBuilder().where().gt("graspLevel", 0).query().size();//大于0 ，学过的词汇*/
+
+            Dao<Lib,Integer> libD = DBHelper.getHelper(getActivity()).getDao(Lib.class);
+            Where<Lib, Integer> libW = libD.queryBuilder().selectColumns("libId").where().eq("libName", currentLib);
+            learnLibD = DBHelper.getHelper(getActivity()).getDao(LearnLib.class);
+            int num = learnLibD.queryBuilder().where().in("libId",libW.query()).and().gt("graspLevel", 0).query().size();//大于0 ，学过的词汇
             percent = num * 1.0 / totalNum;
         } catch (SQLException e) {
             e.printStackTrace();
