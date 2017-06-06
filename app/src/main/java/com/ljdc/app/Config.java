@@ -28,8 +28,10 @@ public class Config {
     public static String SEARCH_WORD_API_URL_PRE = SEARCH_WORD_API_URL + "?w=";
     public static String SEARCH_WORD_API_URL_AFTER = "&key=" + SEARCH_WORD_API_KEY;
     public static String SEARCH_WORD_API_URL_AFTER_BY_JSON = "&type=json&key=" + SEARCH_WORD_API_KEY;
-    //        public static String LOCAL_IP = "192.168.191.1";
-    public static String LOCAL_IP = "10.18.80.163";
+//            public static String LOCAL_IP = "192.168.191.1";//猎豹WIFI
+//    public static String LOCAL_IP = "10.18.80.163";  //海马玩模拟器
+    public static String LOCAL_IP = "10.0.2.2";  //没有网
+
     public static String HOST_URL = "http://" + LOCAL_IP + ":8080";
     public static final String ADD_WORD_URL = HOST_URL + "/sync/addOneWordToLib";
     public static final String SYNC_LEARN_LIB_URL = HOST_URL + "/sync/syncLearnLib";

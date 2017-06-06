@@ -27,7 +27,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="英语四级核心词汇"
-                android:textSize="18sp"
                 android:id="@+id/bookName"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"/>
@@ -39,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/textView3">
+                >
 
             <LinearLayout
                     android:orientation="vertical"

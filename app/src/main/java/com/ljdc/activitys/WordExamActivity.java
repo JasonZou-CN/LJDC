@@ -76,6 +76,8 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
     private Map<Integer, Integer> LEVEL_TO_TOTAL_COUNT = null;//保存个层级词汇的总数
     private long startQuizTime;
     private long endQuizTime;
+    private StudyPlan plan;
+    private Dao<StudyPlan,Integer> planDao;
 
     @Override
 
@@ -90,6 +92,15 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
         initData();
         String s = Utils.getPreference(this, Config.SP_DEFAULT_PRON);
         defaultPron = Integer.parseInt(s.equals("") ? "0" : s);
+
+        try {
+            planDao = dbHelper.getDao(StudyPlan.class);
+            List<StudyPlan> l = planDao.queryForAll();
+            if(l.size()!=0)
+                plan = l.get(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         uiHandler = new Handler() {
             @Override
@@ -422,6 +433,7 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
             }
 
             learnLib.graspLevel = graspLevel;
+            plan.doOfDay++;
         } else if (learnLib.graspLevel < 3)
             learnLib.graspLevel++;
         learnLib.updateTime = new Date();
@@ -430,6 +442,7 @@ public class WordExamActivity extends Activity implements View.OnClickListener {
             if (learnLibD == null)
                 learnLibD = dbHelper.getDao(LearnLib.class);
             learnLibD.update(learnLib);
+            planDao.update(plan);
         } catch (SQLException e) {
             e.printStackTrace();
         }

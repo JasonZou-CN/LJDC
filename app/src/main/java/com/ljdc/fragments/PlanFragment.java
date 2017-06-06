@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,7 +22,9 @@ import com.ljdc.R;
 import com.ljdc.activitys.MainActivity;
 import com.ljdc.activitys.WordExamActivity;
 import com.ljdc.database.DBHelper;
-import com.ljdc.pojo.*;
+import com.ljdc.pojo.LearnLib;
+import com.ljdc.pojo.Lib;
+import com.ljdc.pojo.StudyPlan;
 import com.ljdc.utils.Act;
 
 import java.sql.SQLException;
@@ -42,6 +43,8 @@ public class PlanFragment extends Fragment implements OnClickListener {
     private PieChart mChart;
     private Typeface tf;
 
+    private String currentLib;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,12 +55,18 @@ public class PlanFragment extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         content = inflater.inflate(R.layout.fragment_plan, null);
-        initView(inflater);
+//        initView(inflater);
         return content;
 
     }
 
-    private void initView(LayoutInflater inflater) {
+    @Override
+    public void onStart() {
+        super.onStart();
+        initView();
+    }
+
+    private void initView() {
 
         title = ((MainActivity) getActivity()).title;
         title.setText("进度");
@@ -72,7 +81,7 @@ public class PlanFragment extends Fragment implements OnClickListener {
         mChart = (PieChart) content.findViewById(R.id.pieChart);
         int[] data = new int[]{0, 0, 0, 0};
         try {
-            String currentLib = null;
+            currentLib = null;
             dbHelper = DBHelper.getHelper(getActivity());
             List<StudyPlan> studyPlen = dbHelper.getDao(StudyPlan.class).queryForAll();
             if (studyPlen != null && studyPlen.size() != 0) {
@@ -119,7 +128,7 @@ public class PlanFragment extends Fragment implements OnClickListener {
         pieChart.setDescription("词汇结构分析");
 
         pieChart.setDrawCenterText(true);  //饼状图中间可以添加文字
-        pieChart.setCenterText("四级词库");  //饼状图中间的文字
+        pieChart.setCenterText(currentLib);  //饼状图中间的文字
 
         pieChart.setRotationAngle(90); // 初始旋转角度
 
